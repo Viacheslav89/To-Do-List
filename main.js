@@ -12,7 +12,7 @@ add.addEventListener('click', function(event) {
     const li = document.createElement('li');
     if (!input.value) return;
 
-    li.innerHTML = `<div class="wrapper_svg"><img class="fit-picture perform" src="./svg/perform.svg"><img class="fit-picture deleteLi" src="./svg/delete.svg"><img class="fit-picture edit" src="./svg/edit.svg"></div>`;
+    li.innerHTML = `<div class="wrapper_svg"><img class="fit-picture perform" src="./svg/perform.svg" alt="Выполнить"><img class="fit-picture deleteLi" src="./svg/delete.svg" alt="Удалить"><img class="fit-picture edit" src="./svg/edit.svg" alt="Редактировать"></div>`;
 
     const textBox = document.createElement('div');
     textBox.append(input.value);
@@ -32,14 +32,19 @@ const deleteLi = document.querySelector('.deleteLi');
 const edit = document.querySelector('.edit');
 
 
+
+
 // обработчики событий svg
 list.addEventListener('click', function(event) {
     let li = event.target.closest('li');
 
+    // кнопка удалить
     if (event.target.classList.contains('deleteLi')) {
         li.remove();
     }
 
+
+    // кнопка редактировать
     if (event.target.classList.contains('edit')) {
     
         let wrapperSvg = event.target.closest('li').querySelector('.wrapper_svg');
@@ -60,7 +65,6 @@ list.addEventListener('click', function(event) {
         inputLi.value = text;
 
         li.append(inputLi);
-
         textBox.innerHTML = '';
 
         let ok = event.target.closest('li').querySelector('.ok');
@@ -68,26 +72,20 @@ list.addEventListener('click', function(event) {
 
             let text = inputLi.value;
             inputLi.remove();
-
             textBox.innerHTML = text;
-
             ok.remove();
         })
     }
 
+    // кнопка выполнено
     if (event.target.classList.contains('perform')) {
         let textBox = event.target.closest('li').querySelector('.wrapper_text')
 
-        let text = event.target.closest('li').querySelector('.wrapper_text').textContent;
-
         textBox.classList.add('list_item_finish');
-        console.log(text);
+        console.log(textBox.textContent);
     }
 
 })
-
-
-
 
 
 // удаляю все li с list
@@ -95,4 +93,9 @@ clear.addEventListener('click', function(event) {
     list.querySelectorAll('li').forEach((li) => li.remove())
 })
 
+
+const activeList = document.querySelector('.activeList');
+activeList.addEventListener('click', function(event) {
+        
+})
 

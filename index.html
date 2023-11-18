@@ -7,6 +7,7 @@
     <title>To Do List</title>
 </head>
 <body>
+  <div class="wrapper">
     <h1 class="title">To Do List</h1>
     <input class="input" type="text">
 
@@ -16,21 +17,21 @@
         <button class="clear btn">Очистить</button>
     </div>
 
-    <!-- <input class="all" type="checkbox">
-    <input class="completed" type="checkbox">
-    <input class="active" type="checkbox"> -->
-
+    <div class="check">
+        <input class="allList" name="radio" type="radio" id="1" checked>
+        <label for="1">Весь список</label>
+        <br>
+        <input class="activeList" name="radio" type="radio" id="2">
+        <label for="2">Активные</label>
+        <br>
+        <input class="finishedList" name="radio" type="radio" id="3">
+        <label for="3">Выполненые</label>
+    </div>
 
     <ol class="list">
-        
     </ol>
 
     <script src="./main.js"></script>
-
+  </div>
 </body>
 </html>
-
-
-<!-- <img class="fit-picture perform" src="./svg/perform.svg">
-<img class="fit-picture delete" src="./svg/delete.svg">
-<img class="fit-picture edit" src="./svg/edit.svg"> -->

@@ -71,7 +71,7 @@ body {
     margin-bottom: 15px;
     border-bottom: 2px solid black;
     position: relative;
-    right: 55px;
+    right: 63px;
 }
 
 .list_item_finish {
@@ -118,5 +118,9 @@ body {
         margin-right: auto;
         margin-top: 60px;
         width: 240px;
+    }
+
+    .input_li {
+        font-size: 15px;
     }
 }

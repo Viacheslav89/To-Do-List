@@ -57,7 +57,7 @@ list.addEventListener('click', function(event) {
         inputLi.classList.add('input_li');
 
         let text = event.target.closest('li').querySelector('.wrapper_text').textContent;
-        inputLi.placeholder = text;
+        inputLi.value = text;
 
         li.append(inputLi);
 
@@ -65,7 +65,7 @@ list.addEventListener('click', function(event) {
 
         let ok = event.target.closest('li').querySelector('.ok');
         ok.addEventListener('click', function(event) {
-            console.log(inputLi.placeholder);
+
             let text = inputLi.value;
             inputLi.remove();
 

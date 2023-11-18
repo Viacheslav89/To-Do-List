@@ -21,10 +21,16 @@ body {
     border: 1px solid black;
     border-radius: 10px;
     margin-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+::placeholder {
+    color: black;
 }
 
 .wrapper_main-btn {
-    width: 230px;
+    width: 225px;
     display: flex;
     justify-content: space-between;
     /* background-color: aqua; */
@@ -63,7 +69,21 @@ body {
     margin-bottom: 10px;
     border-bottom: 2px solid black;
     position: relative;
-    right: 45px;
+    right: 55px;
+}
+
+.list_item_finish {
+    text-decoration: line-through;
+    color: grey;
+}
+
+.input_li {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
 }
 
 .fit-picture {
@@ -72,8 +92,8 @@ body {
 }
 
 .wrapper_svg {
-    width: 80px;
+    width: 100px;
     position: absolute;
-    right: -90px;
+    right: -110px;
     top: 0;
 }

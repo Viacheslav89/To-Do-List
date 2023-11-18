@@ -38,23 +38,42 @@ body {
     border: 1px solid black;
     border-radius: 10px;
     background-color: #6ba32d;
-    /* background-color: #69cc39; */
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 10px;
+    background-color: #547f1d;
 }
 
 .list {
     font-size: 20px;
     font-weight: bold;
     margin-left: 30px;
-    margin-top: 50px;
+    margin-top: 60px;
+    width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-all;
+    /* padding-right: 150px; */
 }
 
-
 .list_item {
+    margin: 0;
     margin-bottom: 10px;
-    
+    border-bottom: 2px solid black;
+    position: relative;
+    right: 45px;
 }
 
 .fit-picture {
     height: 25px;
     cursor: pointer;
+}
+
+.wrapper_svg {
+    width: 80px;
+    position: absolute;
+    right: -90px;
+    top: 0;
 }

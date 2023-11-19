@@ -25,13 +25,18 @@ add.addEventListener('click', function(event) {
     input.value = '';
 })
 
+input.addEventListener('keypress', function(event) {
+    if (event.key === "Enter") {
+        add.click();
+    }
+})
+
 
 // переменные SVG
 const perform = document.querySelector('.perform');
 const deleteLi = document.querySelector('.deleteLi');
 const edit = document.querySelector('.edit');
-
-
+let completedUl = document.createElement('ul');
 
 
 // обработчики событий svg
@@ -82,7 +87,14 @@ list.addEventListener('click', function(event) {
         let textBox = event.target.closest('li').querySelector('.wrapper_text')
 
         textBox.classList.add('list_item_finish');
-        console.log(textBox.textContent);
+
+        // completedUl.classList.add('list')  
+
+        // let completedLi = document.createElement('li');
+        // completedLi.classList.add('completed', 'list_item');
+        
+        // completedLi.innerHTML = textBox.textContent;
+        // completedUl.append(completedLi);
     }
 
 })
@@ -94,8 +106,9 @@ clear.addEventListener('click', function(event) {
 })
 
 
-const activeList = document.querySelector('.activeList');
-activeList.addEventListener('click', function(event) {
-        
-})
+// let completedRadio = document.querySelector('.completedRadio');
+
+// completedRadio.addEventListener('click', function(event) {
+//     list.append(completedUl);
+// })
 

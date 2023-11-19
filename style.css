@@ -62,11 +62,34 @@ body {
     margin-right: auto;
 }
 
+.wrapper_ol {
+        margin-top: 60px;
+}
+
 .list {
     font-size: 20px;
     font-weight: bold;
     margin-left: 30px;
-    margin-top: 60px;
+    width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-all;
+}
+
+.list2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 30px;
+    width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-all;
+}
+
+.list3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 30px;
     width: 550px;
     margin-left: auto;
     margin-right: auto;
@@ -79,6 +102,11 @@ body {
     border-bottom: 2px solid black;
     position: relative;
     right: 66px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: rgb(182, 5, 5);
 }
 
 .list_item_finish {
@@ -108,6 +136,10 @@ body {
     top: 0;
     display: flex;
     justify-content: right;
+}
+
+.hidden {
+    display: none;
 }
 
 

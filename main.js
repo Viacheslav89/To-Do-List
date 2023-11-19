@@ -113,7 +113,7 @@ list.addEventListener('click', function(event) {
 
 // удаляю все li с list
 clear.addEventListener('click', function(event) {
-    document.querySelector('li').forEach((li) => li.remove())
+    document.querySelectorAll('li').forEach((li) => li.remove())
 })
 
 

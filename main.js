@@ -11,32 +11,36 @@ const list3 = document.querySelector('.list3');
 // добавляю li в list
 add.addEventListener('click', function(event) {
     const li = document.createElement('li');
-    // const li2 = document.createElement('li');
+    const li2 = document.createElement('li');
 
     if (!input.value) return;
 
     li.innerHTML = `<div class="wrapper_svg"><img class="fit-picture perform" src="./svg/perform.svg" alt="Выполнить"><img class="fit-picture deleteLi" src="./svg/delete.svg" alt="Удалить"><img class="fit-picture edit" src="./svg/edit.svg" alt="Редактировать"></div>`;
 
+    li2.innerHTML = `<div class="wrapper_svg"><img class="fit-picture perform" src="./svg/perform.svg" alt="Выполнить"><img class="fit-picture deleteLi" src="./svg/delete.svg" alt="Удалить"><img class="fit-picture edit" src="./svg/edit.svg" alt="Редактировать"></div>`;
+
     const textBox = document.createElement('div');
-    // const textBox2 = document.createElement('div');
+    const textBox2 = document.createElement('div');
 
     textBox.append(input.value);
-    // textBox2.append(input.value);
+    textBox2.append(input.value);
 
     textBox.classList.add('wrapper_text');
-    // textBox2.classList.add('wrapper_text');
+    textBox2.classList.add('wrapper_text');
 
     li.classList.add('list_item');
-    // li2.classList.add('list_item');
+    li2.classList.add('list_item');
 
     li.append(textBox);
-    // li2.append(textBox2);
+    li2.append(textBox2);
 
 
     list.append(li);
-    // list2.append(li2);
+    list2.append(li2);
 
     input.value = '';
+
+    document.querySelector('#text2').append(li2);
 })
 
 input.addEventListener('keypress', function(event) {
@@ -106,7 +110,7 @@ list.addEventListener('click', function(event) {
         completedLi.classList.add('completed', 'list_item');
         completedLi.innerHTML = li.innerHTML;
         document.querySelector('#text3').append(completedLi);
-        // console.log(completedLi);
+        
     }
 })
 

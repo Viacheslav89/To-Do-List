@@ -63,7 +63,7 @@ body {
 }
 
 .wrapper_ol {
-        margin-top: 60px;
+    margin-top: 60px;
 }
 
 .list {
@@ -159,6 +159,11 @@ body {
         margin-left: auto;
         margin-right: auto;
         margin-top: 60px;
+        width: 240px;
+    }
+
+    .list3 {
+        font-size: 14px;
         width: 240px;
     }
 

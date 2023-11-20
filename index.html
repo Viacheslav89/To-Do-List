@@ -7,31 +7,29 @@
     <title>To Do List</title>
 </head>
 <body>
-  <div class="wrapper">
+  <div class="main-wrapper">
     <h1 class="title">To Do List</h1>
     <input class="input" type="text">
 
 
-    <div class="wrapper_main-btn">
+    <div class="btn-wrapper">
         <button class="add btn">Добавить</button>
         <button class="clear btn">Очистить</button>
     </div>
 
-    <div class="check">
-        <input class="allRadio" name="radio" type="radio" id="r1" checked>
-        <label for="r1">Весь список</label>
+    <div class="radio-wrapper">
+        <input class="all-radio" name="radio" type="radio" id="all-radio" checked>
+        <label for="all-radio">Весь список</label>
         <br>
-        <input class="activeRadio" name="radio" type="radio" id="r2">
-        <label for="r2">Активные</label>
+        <input class="active-radio" name="radio" type="radio" id="active-radio">
+        <label for="active-radio">Активные</label>
         <br>
-        <input class="completedRadio" name="radio" type="radio" id="r3">
-        <label for="r3">Выполненые</label>
+        <input class="completed-radio" name="radio" type="radio" id="completed-radio">
+        <label for="completed-radio">Выполненые</label>
     </div>
 
-    <div class="wrapper_ol">
-      <ol id="text1" class="list"></ol>
-      <ol id="text2" class="list2 hidden"></ol>
-      <ol id="text3" class="list3 hidden"></ol>
+    <div class="ol-wrapper">
+      <ol class="todo-list"></ol>
     </div>
 
     <script src="./main.js"></script>

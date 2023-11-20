@@ -1,5 +1,4 @@
 body {
-
     background: url(./img/toDo3.jpg) no-repeat;
     background-size: cover;
     min-height: 100vh;
@@ -12,7 +11,7 @@ body {
     text-align: center;
 }
 
-.wrapper {
+.main-wrapper {
     padding-left: 5px;
     padding-right: 5px;
 }
@@ -30,7 +29,7 @@ body {
     padding-right: 10px;
 }
 
-.wrapper_main-btn {
+.btn-wrapper {
     width: 225px;
     display: flex;
     justify-content: space-between;
@@ -53,7 +52,7 @@ body {
     background-color: #547f1d;
 }
 
-.check {
+.radio-wrapper {
     width: 350px;
     display: flex;
     justify-content: space-between;
@@ -61,54 +60,47 @@ body {
     margin-right: auto;
 }
 
-.wrapper_ol {
+.ol-wrapper {
     margin-top: 60px;
 }
 
-.list {
+.todo-list {
     font-size: 20px;
     font-weight: bold;
     margin-left: 30px;
-    width: 550px;
+    width: 650px;
     margin-left: auto;
     margin-right: auto;
     word-break: break-all;
 }
 
-.list2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 30px;
-    width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-    word-break: break-all;
+.todo-list__item {
+    display: flex;
+    justify-content: space-between;
 }
 
-.list3 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 30px;
-    width: 550px;
-    margin-left: auto;
-    margin-right: auto;
-    word-break: break-all;
-}
-
-.list_item {
+.todo-list__text {
     margin: 0;
     margin-bottom: 15px;
     border-bottom: 2px solid black;
-    position: relative;
-    right: 66px;
+    width: 100%;
 }
 
-.completed {
-    text-decoration: line-through;
-    color: rgb(182, 5, 5);
+.todo-list-img__wrapper {
+    display: flex;
+    width: 110px;
+    justify-content: flex-end;
+    padding-left: 10px;;
+    height: 25px;
 }
 
-.list_item_finish {
+.picture {
+    height: 25px;
+    cursor: pointer;
+    right: 0;
+}
+
+.todo-list__completed {
     text-decoration: line-through;
     color: rgb(182, 5, 5);
 }
@@ -119,22 +111,6 @@ body {
     border: 0;
     font-size: 20px;
     font-weight: bold;
-    position: relative;
-}
-
-.fit-picture {
-    height: 25px;
-    cursor: pointer;
-    right: 0;
-}
-
-.wrapper_svg {
-    width: 100px;
-    position: absolute;
-    right: -110px;
-    top: 0;
-    display: flex;
-    justify-content: right;
 }
 
 .hidden {
@@ -152,23 +128,14 @@ body {
         width: 355px;
     }
 
-    .list {
-        font-size: 14px;
+    .todo-list {
+        font-size: 20px;
         font-weight: bold;
+        margin-left: 30px;
+        width: 340px;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 60px;
-        width: 240px;
-    }
-
-    .list2 {
-        font-size: 14px;
-        width: 240px;
-    }
-
-    .list3 {
-        font-size: 14px;
-        width: 240px;
+        word-break: break-all;
     }
 
     .input_li {

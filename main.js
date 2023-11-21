@@ -9,27 +9,28 @@ const todolist = document.querySelector('.todo-list');
 todoListArr = [];
 let counter = 1;
 
+const todo = {
+    active: false, 
+    id: counter, 
+}
+
 
 add.addEventListener('click', function(event) {
     if (!input.value) return;
-
-
-    const todo = {
-        text: input.value,
-        active: false, 
-        id: counter, 
-    }
+    
+    todo.text = input.value;
     counter++;
 
     input.value = '';
     todoListArr.push(todo);
-    // todolist.innerHTML = '';
 
     const li = document.createElement('li');
     li.classList.add('todo-list__item');
+    li.id = todo.id;
 
     const p = document.createElement('p');
     p.classList.add('todo-list__text');
+    p.classList.add(todo.class);
     p.append(todo.text);
 
     const div = document.createElement('div');
@@ -59,10 +60,20 @@ todolist.addEventListener('click', function(event) {
     // const del = event.target.closest('li').querySelector('.del');
     // const edit = event.target.closest('li').querySelector('.edit');
 
-    // обработчики событий вополнено
+    // обработчики событий выполнено
     if (event.target.classList.contains('perform')) {
         li.classList.add('todo-list__completed');
-        // console.log(todoListArr);
+        let id = li.id;
+        todoListArr.forEach((todo) => {
+            if (todo.id == id) {
+                todo.active = true;
+            }
+        })
+
+        // // console.log(todoListArr.filter(todo => todo.id == id));
+        // let completedArr = todoListArr.filter(todo => todo.id == id);
+        
+
     }
 
     // обработчики событий удалить
@@ -72,7 +83,7 @@ todolist.addEventListener('click', function(event) {
 
     // обработчики событий редактировать
     if (event.target.classList.contains('edit')) {
-        // li.querySelector('img').classList.remove('hidden');
+        if (imgWrapper.childNodes.length === 4) return;
 
         let inputLi = document.createElement('input');
         inputLi.classList.add('input_li');
@@ -110,7 +121,29 @@ todolist.addEventListener('click', function(event) {
                 ok.click();
             }
         })
-
-        
     }
+})
+
+
+// удаляю все li с list
+clear.addEventListener('click', function(event) {
+    todolist.querySelectorAll('li').forEach((li) => li.remove())
+})
+
+
+const completedRadio = document.querySelector('.completed-radio');
+completedRadio.addEventListener('click', function(event) {
+    // let id = li.id;
+    // console.log(todoListArr.filter(todo => todo.id == id));
+    // let completedArr = todoListArr.filter(todo => todo.id == id);
+    
+    
+    
+    // todolist.innerHTML = '';
+    // console.log(todoListArr.map(todo));
+
+
+
+
+
 })

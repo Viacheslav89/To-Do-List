@@ -3,7 +3,6 @@ const add = document.querySelector('.add');
 const clear = document.querySelector('.clear');
 const todolist = document.querySelector('.todo-list');
 
-
 let todoListArr = [];
 let counter = 1;
 
@@ -33,8 +32,22 @@ add.addEventListener('click', function(event) {
     p.append(todo.text);
 
     const div = document.createElement('div');
-    div.classList.add('todo-list-img__wrapper');
-    div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+    div.classList.add('todo-list__wrapper');
+
+    let buttonCompleted = document.createElement('button');
+    buttonCompleted.classList.add('button', 'btn-completed');
+    buttonCompleted.append('V');
+    div.append(buttonCompleted);
+    
+    let buttonDel = document.createElement('button');
+    buttonDel.classList.add('button', 'btn-del');
+    buttonDel.append('X');
+    div.append(buttonDel);
+    
+    let buttonEdit = document.createElement('button');
+    buttonEdit.classList.add('button', 'btn-edit');
+    buttonEdit.append('..');
+    div.append(buttonEdit);
 
     li.append(p);
     li.append(div);
@@ -51,29 +64,32 @@ input.addEventListener('keypress', function(event) {
 })
 
 
-// обработчики событий svg
+// обработчики событий button
 todolist.addEventListener('click', function(event) {
     const li = event.target.closest('li');
-    const imgWrapper = event.target.closest('.todo-list-img__wrapper');
+    const btnWrapper = event.target.closest('.todo-list__wrapper');
 
     // обработчики событий выполнено
-    if (event.target.classList.contains('perform')) {
+    if (event.target.classList.contains('btn-completed')) {
         li.classList.add('todo-list__completed');
         todoListArr.forEach((todo) => {
             if (todo.id == li.id) {
                 todo.active = false;
             }
         })
+        if (document.querySelector('.active-radio').checked) {
+            li.remove();
+        }
     }
 
     // обработчики событий удалить
-    if (event.target.classList.contains('del')) {
+    if (event.target.classList.contains('btn-del')) {
         li.remove();
     }
 
     // обработчики событий редактировать
-    if (event.target.classList.contains('edit')) {
-        if (imgWrapper.childNodes.length === 4) return;
+    if (event.target.classList.contains('btn-edit')) {
+        if (btnWrapper.childNodes.length === 4) return;
 
         let inputLi = document.createElement('input');
         inputLi.classList.add('input_li');
@@ -81,11 +97,10 @@ todolist.addEventListener('click', function(event) {
         let text = li.querySelector('.todo-list__text').textContent;
         inputLi.value = text;
 
-
-        let imgOk = document.createElement('img');
-        imgOk.classList.add('picture', 'ok');
-        imgOk.src = './svg/ok.svg';
-        imgWrapper.prepend(imgOk);
+        let buttonOk = document.createElement('button');
+        buttonOk.classList.add('button', 'btn-ok');
+        buttonOk.append('ok');
+        btnWrapper.prepend(buttonOk);
 
         let textBox = event.target.closest('li').querySelector('.todo-list__text');
 
@@ -93,17 +108,14 @@ todolist.addEventListener('click', function(event) {
         textBox.append(inputLi);
         inputLi.focus();
         
-        
-        let ok = event.target.closest('li').querySelector('.ok');
-        ok.addEventListener('click', function(event) {
-            if (event.target.classList.contains('ok')) {
+        buttonOk.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-ok')) {
                 let text = inputLi.value;
                 inputLi.remove();
                 textBox.innerHTML = text;
-                ok.remove();
+                buttonOk.remove();
             }
         })
-
         
         inputLi.addEventListener('keypress', function(event) {
             if (event.key === "Enter") {
@@ -132,14 +144,28 @@ completedRadio.addEventListener('click', function(event) {
             p.append(todo.text);
             
             const div = document.createElement('div');
-            div.classList.add('todo-list-img__wrapper');
-            div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+            div.classList.add('todo-list__wrapper');
+
+            let buttonCompleted = document.createElement('button');
+            buttonCompleted.classList.add('button', 'btn-completed');
+            buttonCompleted.append('V');
+            div.append(buttonCompleted);
+            
+            let buttonDel = document.createElement('button');
+            buttonDel.classList.add('button', 'btn-del');
+            buttonDel.append('X');
+            div.append(buttonDel);
+            
+            let buttonEdit = document.createElement('button');
+            buttonEdit.classList.add('button', 'btn-edit');
+            buttonEdit.append('..');
+            div.append(buttonEdit);
             
             li.append(p);
             li.append(div);
             todolist.append(li);
         }
-    });
+    })
     
 })
 
@@ -162,21 +188,35 @@ activeRadio.addEventListener('click', function(event) {
             p.append(todo.text);
             
             const div = document.createElement('div');
-            div.classList.add('todo-list-img__wrapper');
-            div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+            div.classList.add('todo-list__wrapper');
+        
+            let buttonCompleted = document.createElement('button');
+            buttonCompleted.classList.add('button', 'btn-completed');
+            buttonCompleted.append('V');
+            div.append(buttonCompleted);
+            
+            let buttonDel = document.createElement('button');
+            buttonDel.classList.add('button', 'btn-del');
+            buttonDel.append('X');
+            div.append(buttonDel);
+            
+            let buttonEdit = document.createElement('button');
+            buttonEdit.classList.add('button', 'btn-edit');
+            buttonEdit.append('..');
+            div.append(buttonEdit);
             
             li.append(p);
             li.append(div);
             todolist.append(li);
         }
-    });
+    })
 })
 
 
 // радио весь лист
 const allRadio = document.querySelector('.all-radio');
 allRadio.addEventListener('click', function(event) {
-    
+
     todolist.innerHTML = '';
     
     todoListArr.forEach(todo => {
@@ -193,15 +233,29 @@ allRadio.addEventListener('click', function(event) {
         }
             
         p.append(todo.text);
-        
+    
         const div = document.createElement('div');
-        div.classList.add('todo-list-img__wrapper');
-        div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+        div.classList.add('todo-list__wrapper');
+    
+        let buttonCompleted = document.createElement('button');
+        buttonCompleted.classList.add('button', 'btn-completed');
+        buttonCompleted.append('V');
+        div.append(buttonCompleted);
+        
+        let buttonDel = document.createElement('button');
+        buttonDel.classList.add('button', 'btn-del');
+        buttonDel.append('X');
+        div.append(buttonDel);
+        
+        let buttonEdit = document.createElement('button');
+        buttonEdit.classList.add('button', 'btn-edit');
+        buttonEdit.append('..');
+        div.append(buttonEdit);
         
         li.append(p);
         li.append(div);
         todolist.append(li);
-    });
+    })
 })
 
 

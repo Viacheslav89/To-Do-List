@@ -101,7 +101,7 @@ body {
 
 .todo-list__wrapper {
     display: flex;
-    width: 110px;
+    width: 120px;
     justify-content: flex-end;
     padding-left: 10px;;
     height: 25px;
@@ -165,7 +165,7 @@ body {
 }
 
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 500px) {
     .title {
         font-size: 50px;
     }

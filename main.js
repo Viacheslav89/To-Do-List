@@ -119,7 +119,7 @@ todolist.addEventListener('click', function(event) {
         
         inputLi.addEventListener('keypress', function(event) {
             if (event.key === "Enter") {
-                ok.click();
+                buttonOk.click();
             }
         })
     }

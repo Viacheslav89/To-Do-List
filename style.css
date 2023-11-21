@@ -120,22 +120,22 @@ body {
     cursor: pointer;
 }
 
-.btn-edit {
-    background-color: rgb(248, 248, 78);
-}
-
-.btn-del {
-    background-color: rgb(246, 61, 61);
+.btn-ok {
+    background-color: rgb(192, 192, 246);
+    font-size: 9px;
+    font-weight: bold;
 }
 
 .btn-completed {
     background-color: rgb(114, 173, 41);
 }
 
-.btn-ok {
-    background-color: rgb(192, 192, 246);
-    font-size: 9px;
-    font-weight: bold;
+.btn-del {
+    background-color: rgb(246, 61, 61);
+}
+
+.btn-edit {
+    background-color: rgb(248, 248, 78);
 }
 
 

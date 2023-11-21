@@ -9,16 +9,17 @@ const todolist = document.querySelector('.todo-list');
 todoListArr = [];
 let counter = 1;
 
-const todo = {
-    active: false, 
-    id: counter, 
-}
 
 
 add.addEventListener('click', function(event) {
     if (!input.value) return;
     
-    todo.text = input.value;
+    const todo = {
+        text: input.value,
+        active: true, 
+        id: counter, 
+    }
+
     counter++;
 
     input.value = '';
@@ -55,25 +56,15 @@ todolist.addEventListener('click', function(event) {
     const li = event.target.closest('li');
     const imgWrapper = event.target.closest('.todo-list-img__wrapper');
 
-    // const ok = event.target.closest('li').querySelector('.ok');
-    // const perform = event.target.closest('li').querySelector('.perform');
-    // const del = event.target.closest('li').querySelector('.del');
-    // const edit = event.target.closest('li').querySelector('.edit');
-
     // обработчики событий выполнено
     if (event.target.classList.contains('perform')) {
         li.classList.add('todo-list__completed');
         let id = li.id;
         todoListArr.forEach((todo) => {
             if (todo.id == id) {
-                todo.active = true;
+                todo.active = false;
             }
         })
-
-        // // console.log(todoListArr.filter(todo => todo.id == id));
-        // let completedArr = todoListArr.filter(todo => todo.id == id);
-        
-
     }
 
     // обработчики событий удалить
@@ -131,19 +122,90 @@ clear.addEventListener('click', function(event) {
 })
 
 
+// радио выполненые
 const completedRadio = document.querySelector('.completed-radio');
 completedRadio.addEventListener('click', function(event) {
-    // let id = li.id;
-    // console.log(todoListArr.filter(todo => todo.id == id));
-    // let completedArr = todoListArr.filter(todo => todo.id == id);
     
+    todolist.innerHTML = '';
+
+    todoListArr.forEach(todo => {
+        if (todo.active == false) {
+
+            const li = document.createElement('li');
+            li.classList.add('todo-list__item');
+
+            const p = document.createElement('p');
+            p.classList.add('todo-list__text', 'todo-list__completed');
+            p.append(todo.text);
+
+            const div = document.createElement('div');
+            div.classList.add('todo-list-img__wrapper');
+            div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+
+            li.append(p);
+            li.append(div);
+            todolist.append(li);
+        }
+    });
+
+})
+
+
+// радио активные
+const activeRadio = document.querySelector('.active-radio');
+activeRadio.addEventListener('click', function(event) {
     
+    todolist.innerHTML = '';
+
+    todoListArr.forEach(todo => {
+        if (todo.active == true) {
+
+            const li = document.createElement('li');
+            li.classList.add('todo-list__item');
+
+            const p = document.createElement('p');
+            p.classList.add('todo-list__text');
+            p.append(todo.text);
+
+            const div = document.createElement('div');
+            div.classList.add('todo-list-img__wrapper');
+            div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+
+            li.append(p);
+            li.append(div);
+            todolist.append(li);
+        }
+    });
+})
+
+
+
+// радио весь лист
+const allRadio = document.querySelector('.all-radio');
+allRadio.addEventListener('click', function(event) {
     
-    // todolist.innerHTML = '';
-    // console.log(todoListArr.map(todo));
+    todolist.innerHTML = '';
 
+    todoListArr.forEach(todo => {
 
+            const li = document.createElement('li');
+            li.classList.add('todo-list__item');
 
+            const p = document.createElement('p');
+            p.classList.add('todo-list__text');
 
+            if (todo.active == false) {
+                p.classList.add('todo-list__completed');
+            }
+            
+            p.append(todo.text);
 
+            const div = document.createElement('div');
+            div.classList.add('todo-list-img__wrapper');
+            div.innerHTML = '<img class="picture perform" src="./svg/perform.svg"><img class="picture del" src="./svg/delete.svg"><img class="picture edit" src="./svg/edit.svg"></img>';
+
+            li.append(p);
+            li.append(div);
+            todolist.append(li);
+    });
 })

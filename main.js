@@ -16,6 +16,10 @@ add.addEventListener('click', function(event) {
         active: true,
         id: counter,
     };
+    
+    if (input.value[0] !== input.value[0].toUpperCase()) {
+        todo.text = `${input.value[0].toUpperCase()}${input.value.slice(1)}`;
+    }
 
     counter++;
     input.value = '';

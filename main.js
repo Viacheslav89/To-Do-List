@@ -94,6 +94,10 @@ todolist.addEventListener('click', function(event) {
         let inputLi = document.createElement('input');
         inputLi.classList.add('input_li');
 
+        if (li.querySelector('p').classList.contains('todo-list__completed')) {
+            inputLi.classList.add('todo-list__completed');
+        }
+
         let text = li.querySelector('.todo-list__text').textContent;
         inputLi.value = text;
 

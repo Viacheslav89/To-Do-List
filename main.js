@@ -7,6 +7,7 @@ const todolist = document.querySelector('.todo-list');
 let todoListArr = [];
 let counter = 1;
 
+
 add.addEventListener('click', function(event) {
     if (!input.value) return;
     
@@ -36,7 +37,6 @@ add.addEventListener('click', function(event) {
     todolist.append(li);
 
     todoListArr.push(todo);
-    console.log(todoListArr)
 })
 
 
@@ -54,14 +54,10 @@ todolist.addEventListener('click', function(event) {
 
     // обработчики событий выполнено
     if (event.target.classList.contains('perform')) {
-        // console.log(todoListArr);
         li.classList.add('todo-list__completed');
         todoListArr.forEach((todo) => {
-            // console.log(todo);
             if (todo.id == li.id) {
                 todo.active = false;
-                // console.log(li);
-                // console.log(todoListArr);
             }
         })
     }
@@ -138,7 +134,6 @@ completedRadio.addEventListener('click', function(event) {
             li.append(p);
             li.append(div);
             todolist.append(li);
-            console.log(li);
         }
     });
     
@@ -156,6 +151,7 @@ activeRadio.addEventListener('click', function(event) {
             
             const li = document.createElement('li');
             li.classList.add('todo-list__item');
+            li.id = todo.id;
             
             const p = document.createElement('p');
             p.classList.add('todo-list__text');

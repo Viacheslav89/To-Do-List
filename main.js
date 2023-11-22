@@ -15,43 +15,39 @@ addButton.addEventListener('click', function(event) {
         active: true,
         id: counter,
     };
-    
-    // if (input.value[0] !== input.value[0].toUpperCase()) {
-    //     todo.text = `${input.value[0].toUpperCase()}${input.value.slice(1)}`;
-    // }
 
     counter++;
     input.value = '';
 
-    const li = document.createElement('li');
-    li.classList.add('todo-list__item');
-    li.id = todo.id;
+    const todoItem = document.createElement('li');
+    todoItem.classList.add('todo-list__item');
+    todoItem.id = todo.id;
 
-    const p = document.createElement('p');
-    p.classList.add('todo-list__text');
-    p.append(todo.text);
+    const todoText = document.createElement('p');
+    todoText.classList.add('todo-list__text');
+    todoText.append(todo.text);
 
-    const div = document.createElement('div');
-    div.classList.add('todo-list__wrapper');
+    const todosWrapper = document.createElement('div');
+    todosWrapper.classList.add('todo-list__wrapper');
 
     const buttonCompleted = document.createElement('button');
     buttonCompleted.classList.add('button', 'btn-completed');
     buttonCompleted.append('V');
-    div.append(buttonCompleted);
+    todosWrapper.append(buttonCompleted);
     
     const buttonDel = document.createElement('button');
     buttonDel.classList.add('button', 'btn-del');
     buttonDel.append('X');
-    div.append(buttonDel);
+    todosWrapper.append(buttonDel);
     
     const buttonEdit = document.createElement('button');
     buttonEdit.classList.add('button', 'btn-edit');
     buttonEdit.append('..');
-    div.append(buttonEdit);
+    todosWrapper.append(buttonEdit);
 
-    li.append(p);
-    li.append(div);
-    todolist.append(li);
+    todoItem.append(todoText);
+    todoItem.append(todosWrapper);
+    todolist.append(todoItem);
 
     todos.push(todo);
 })
@@ -66,29 +62,29 @@ input.addEventListener('keypress', function(event) {
 
 // обработчики событий button
 todolist.addEventListener('click', function(event) {
-    const li = event.target.closest('li');
+    const todoItem = event.target.closest('li');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
 
     // обработчики событий выполнено
     if (event.target.classList.contains('btn-completed')) {
-        if (!li.classList.contains('todo-list__text--completed')) {
-            li.classList.add('todo-list__text--completed');
+        if (!todoItem.classList.contains('todo-list__text--completed')) {
+            todoItem.classList.add('todo-list__text--completed');
             todos.forEach((todo) => {
-                if (todo.id == li.id) {
+                if (todo.id == todoItem.id) {
                     todo.active = false;
                 }
             })
         } else {
-            li.classList.remove('todo-list__text--completed');
+            todoItem.classList.remove('todo-list__text--completed');
             todos.forEach((todo) => {
-                if (todo.id == li.id) {
+                if (todo.id == todoItem.id) {
                     todo.active = true;
                 }
             })
         }
 
         if (document.querySelector('.active-radio').checked) {
-            li.remove();
+            todoItem.remove();
         }
 
     }
@@ -97,13 +93,13 @@ todolist.addEventListener('click', function(event) {
     if (event.target.classList.contains('btn-del')) {
 
         todos.forEach((todo) => {
-            if (todo.id == li.id) {
-                const index = todos.map(el => el.id).indexOf(Number(li.id));
+            if (todo.id == todoItem.id) {
+                const index = todos.map(el => el.id).indexOf(Number(todoItem.id));
                 todos.splice(index, 1);
             }
         })
 
-        li.remove();
+        todoItem.remove();
     }
 
     // обработчики событий редактировать
@@ -113,11 +109,11 @@ todolist.addEventListener('click', function(event) {
         const inputLi = document.createElement('input');
         inputLi.classList.add('todo-list-item__input');
 
-        if (li.querySelector('p').classList.contains('todo-list__text--completed')) {
+        if (todoItem.querySelector('p').classList.contains('todo-list__text--completed')) {
             inputLi.classList.add('todo-list__text--completed');
         }
 
-        const text = li.querySelector('.todo-list__text').textContent;
+        const text = todoItem.querySelector('.todo-list__text').textContent;
         inputLi.value = text;
 
         const buttonOk = document.createElement('button');
@@ -140,8 +136,8 @@ todolist.addEventListener('click', function(event) {
             }
 
             todos.forEach((todo) => {
-                if (todo.id == li.id) {
-                    const index = todos.map(el => el.id).indexOf(Number(li.id));
+                if (todo.id == todoItem.id) {
+                    const index = todos.map(el => el.id).indexOf(Number(todoItem.id));
                     todos[index].text = inputLi.value;
                 }
             })
@@ -165,35 +161,35 @@ completedRadio.addEventListener('click', function(event) {
     todos.forEach(todo => {
         if (todo.active === false) {
 
-            const li = document.createElement('li');
-            li.classList.add('todo-list__item');
-            li.id = todo.id;
+            const todoItem = document.createElement('li');
+            todoItem.classList.add('todo-list__item');
+            todoItem.id = todo.id;
             
-            const p = document.createElement('p');
-            p.classList.add('todo-list__text', 'todo-list__text--completed');
-            p.append(todo.text);
+            const todoText = document.createElement('p');
+            todoText.classList.add('todo-list__text', 'todo-list__text--completed');
+            todoText.append(todo.text);
             
-            const div = document.createElement('div');
-            div.classList.add('todo-list__wrapper');
+            const todosWrapper = document.createElement('div');
+            todosWrapper.classList.add('todo-list__wrapper');
 
             const buttonCompleted = document.createElement('button');
             buttonCompleted.classList.add('button', 'btn-completed');
             buttonCompleted.append('V');
-            div.append(buttonCompleted);
+            todosWrapper.append(buttonCompleted);
             
             const buttonDel = document.createElement('button');
             buttonDel.classList.add('button', 'btn-del');
             buttonDel.append('X');
-            div.append(buttonDel);
+            todosWrapper.append(buttonDel);
             
             const buttonEdit = document.createElement('button');
             buttonEdit.classList.add('button', 'btn-edit');
             buttonEdit.append('..');
-            div.append(buttonEdit);
+            todosWrapper.append(buttonEdit);
             
-            li.append(p);
-            li.append(div);
-            todolist.append(li);
+            todoItem.append(todoText);
+            todoItem.append(todosWrapper);
+            todolist.append(todoItem);
         }
     })
     
@@ -209,35 +205,35 @@ activeRadio.addEventListener('click', function(event) {
     todos.forEach(todo => {
         if (todo.active === true) {
             
-            const li = document.createElement('li');
-            li.classList.add('todo-list__item');
-            li.id = todo.id;
+            const todoItem = document.createElement('li');
+            todoItem.classList.add('todo-list__item');
+            todoItem.id = todo.id;
             
-            const p = document.createElement('p');
-            p.classList.add('todo-list__text');
-            p.append(todo.text);
+            const todoText = document.createElement('p');
+            todoText.classList.add('todo-list__text');
+            todoText.append(todo.text);
             
-            const div = document.createElement('div');
-            div.classList.add('todo-list__wrapper');
+            const todosWrapper = document.createElement('div');
+            todosWrapper.classList.add('todo-list__wrapper');
         
             const buttonCompleted = document.createElement('button');
             buttonCompleted.classList.add('button', 'btn-completed');
             buttonCompleted.append('V');
-            div.append(buttonCompleted);
+            todosWrapper.append(buttonCompleted);
             
             const buttonDel = document.createElement('button');
             buttonDel.classList.add('button', 'btn-del');
             buttonDel.append('X');
-            div.append(buttonDel);
+            todosWrapper.append(buttonDel);
             
             const buttonEdit = document.createElement('button');
             buttonEdit.classList.add('button', 'btn-edit');
             buttonEdit.append('..');
-            div.append(buttonEdit);
+            todosWrapper.append(buttonEdit);
             
-            li.append(p);
-            li.append(div);
-            todolist.append(li);
+            todoItem.append(todoText);
+            todoItem.append(todosWrapper);
+            todolist.append(todoItem);
         }
     })
 })
@@ -251,40 +247,40 @@ allRadio.addEventListener('click', function(event) {
     
     todos.forEach(todo => {
 
-        const li = document.createElement('li');
-        li.classList.add('todo-list__item');
-        li.id = todo.id;
+        const todoItem = document.createElement('li');
+        todoItem.classList.add('todo-list__item');
+        todoItem.id = todo.id;
         
-        const p = document.createElement('p');
-        p.classList.add('todo-list__text');
+        const todoText = document.createElement('p');
+        todoText.classList.add('todo-list__text');
         
         if (todo.active === false) {
-            li.classList.add('todo-list__text--completed');
+            todoItem.classList.add('todo-list__text--completed');
         }
             
-        p.append(todo.text);
+        todoText.append(todo.text);
     
-        const div = document.createElement('div');
-        div.classList.add('todo-list__wrapper');
+        const todosWrapper = document.createElement('div');
+        todosWrapper.classList.add('todo-list__wrapper');
     
         const buttonCompleted = document.createElement('button');
         buttonCompleted.classList.add('button', 'btn-completed');
         buttonCompleted.append('V');
-        div.append(buttonCompleted);
+        todosWrapper.append(buttonCompleted);
         
         const buttonDel = document.createElement('button');
         buttonDel.classList.add('button', 'btn-del');
         buttonDel.append('X');
-        div.append(buttonDel);
+        todosWrapper.append(buttonDel);
         
         const buttonEdit = document.createElement('button');
         buttonEdit.classList.add('button', 'btn-edit');
         buttonEdit.append('..');
-        div.append(buttonEdit);
+        todosWrapper.append(buttonEdit);
         
-        li.append(p);
-        li.append(div);
-        todolist.append(li);
+        todoItem.append(todoText);
+        todoItem.append(todosWrapper);
+        todolist.append(todoItem);
     })
 })
 

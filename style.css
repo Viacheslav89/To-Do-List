@@ -1,4 +1,5 @@
 body {
+    margin: 0;
     background: url(./img/toDo3.jpg) no-repeat;
     background-size: cover;
     min-height: 100vh;
@@ -12,15 +13,15 @@ body {
 }
 
 .main-wrapper {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 0 5px;
+    margin: 0 auto;
 }
 
 .input {
     font-size: 16px;
-    width: 750px;
+    width: 725px;
     height: 30px;
-    margin: auto;
+    margin: 0 auto;
     display: block;
     border: 1px solid black;
     border-radius: 10px;
@@ -55,9 +56,8 @@ body {
 .radio-wrapper {
     width: 350px;
     display: flex;
-    justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: space-around;
+    margin: 0 auto;
 }
 
 .radio {
@@ -84,7 +84,7 @@ body {
     justify-content: space-between;
 }
 
-.input_li {
+.todo-list-item__input {
     width: 100%;
     background: transparent;
     border: 0;
@@ -108,7 +108,7 @@ body {
 }
 
 
-.todo-list__completed {
+.todo-list__text--completed {
     color: rgb(182, 5, 5);
 }
 
@@ -140,7 +140,7 @@ body {
 
 
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 770px) {
     .title {
         font-size: 50px;
     }
@@ -165,13 +165,37 @@ body {
 }
 
 
+@media screen and (max-width: 550px) {
+    .title {
+        font-size: 50px;
+    }
+
+    .input {
+        width: 450px;
+    }
+
+    .todo-list {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 30px;
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        word-break: break-all;
+    }
+
+    .input_li {
+        font-size: 14px;
+    }
+}
+
 @media screen and (max-width: 500px) {
     .title {
         font-size: 50px;
     }
 
     .input {
-        width: 400px;
+        width: 385px;
     }
 
     .todo-list {
@@ -199,6 +223,11 @@ body {
         width: 290px;
     }
 
+    .radio-wrapper {
+        width: 300px;
+        font-size: 12px;
+    }
+
     .todo-list {
         font-size: 13px;
         font-weight: bold;
@@ -211,5 +240,44 @@ body {
 
     .input_li {
         font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 361px) {
+    .title {
+        font-size: 40px;
+    }
+
+    .input {
+        width: 270px;
+    }
+
+    .radio-wrapper {
+        width: 280px;
+        font-size: 12px;
+    }
+
+    .todo-list {
+        font-size: 13px;
+        font-weight: bold;
+        margin-left: 30px;
+        width: 270px;
+        margin-left: auto;
+        margin-right: auto;
+        word-break: break-all;
+    }
+
+    .input_li {
+        font-size: 13px;
+    }
+
+    .button {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .btn-ok {
+        font-size: 5px;
     }
 }

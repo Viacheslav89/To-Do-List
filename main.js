@@ -197,4 +197,3 @@ clearButton.addEventListener('click', function(event) {
     todolist.innerHTML = '';
     todos.length = 0;
 })
-

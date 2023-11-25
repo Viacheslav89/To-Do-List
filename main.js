@@ -1,4 +1,4 @@
-const input = document.querySelector('.input');
+const mainFieldInput = document.querySelector('.input');
 const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
@@ -30,20 +30,20 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий выполнено
-    buttonCompleted.addEventListener('click', function(event) {
+    buttonCompleted.addEventListener('click', (event) => {
         const todoItem = event.target.closest('li');
 
         if (!todoItem.classList.contains('todo-list__text--completed')) {
             todoItem.classList.add('todo-list__text--completed');
             todos.forEach((todo) => {
-                if (todo.id == todoItem.id) {
+                if (todo.id === +todoItem.id) {
                     todo.active = false;
                 }
             })
         } else {
             todoItem.classList.remove('todo-list__text--completed');
             todos.forEach((todo) => {
-                if (todo.id == todoItem.id) {
+                if (todo.id === +todoItem.id) {
                     todo.active = true;
                 }
             })
@@ -61,14 +61,11 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий удалить
-    buttonDel.addEventListener('click', function(event) {
+    buttonDel.addEventListener('click', (event) => {
         const todoItem = event.target.closest('li');
 
-        todos.forEach((todo) => {
-            if (todo.id == todoItem.id) {
-                const index = todos.map(el => el.id).indexOf(Number(todoItem.id));
-                todos.splice(index, 1);
-            }
+        todos.forEach((todo, index) => {
+            todos.splice(index, 1);
         })
 
         todoItem.remove();
@@ -79,23 +76,23 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий редактировать
-    buttonEdit.addEventListener('click', function(event) {
+    buttonEdit.addEventListener('click', (event) => {
         const todoItem = event.target.closest('li');
         const btnWrapper = event.target.closest('.todo-list__wrapper');
 
         if (btnWrapper.childNodes.length === 4) return;
 
-        const inputLi = document.createElement('input');
-        inputLi.classList.add('todo-list-item__input');
+        const todoEditInput = document.createElement('input');
+        todoEditInput.classList.add('todo-list-item__input');
 
         todos.forEach((todo) => {
-            if (todo.active === false && todo.id === Number(todoItem.id)) {
-                inputLi.classList.add('todo-list__text--completed');
+            if (todo.active === false && todo.id === +todoItem.id) {
+                todoEditInput.classList.add('todo-list__text--completed');
             }
         })
 
         const text = todoItem.querySelector('.todo-list__text').textContent;
-        inputLi.value = text;
+        todoEditInput.value = text;
 
         const buttonOk = document.createElement('button');
         buttonOk.classList.add('button', 'btn-ok');
@@ -105,26 +102,26 @@ function createTodoItem(todoItemObj) {
         const textBox = event.target.closest('li').querySelector('.todo-list__text');
 
         textBox.innerHTML = '';
-        textBox.append(inputLi);
-        inputLi.focus();
+        textBox.append(todoEditInput);
+        todoEditInput.focus();
         
-        buttonOk.addEventListener('click', function(event) {
+        buttonOk.addEventListener('click', (event) => {
             if (event.target.classList.contains('btn-ok')) {
-                const text = inputLi.value;
-                inputLi.remove();
+                const text = todoEditInput.value;
+                todoEditInput.remove();
                 textBox.innerHTML = text;
                 buttonOk.remove();
             }
 
             todos.forEach((todo) => {
-                if (todo.id == todoItem.id) {
-                    const index = todos.map(el => el.id).indexOf(Number(todoItem.id));
-                    todos[index].text = inputLi.value;
+                if (todo.id === +todoItem.id) {
+                    const index = todos.map(el => el.id).indexOf(+todoItem.id);
+                    todos[index].text = todoEditInput.value;
                 }
             })
         })
         
-        inputLi.addEventListener('keypress', function(event) {
+        todoEditInput.addEventListener('keypress', (event) => {
             if (event.key === "Enter") {
                 buttonOk.click();
             }
@@ -141,17 +138,17 @@ function createTodoItem(todoItemObj) {
 
 
 // обработчик событий добавить
-addButton.addEventListener('click', function(event) {
-    if (!input.value) return;
+addButton.addEventListener('click', (event) => {
+    if (!mainFieldInput.value) return;
     
     const todo = {
-        text: `${input.value[0].toUpperCase()}${input.value.slice(1)}`,
+        text: `${mainFieldInput.value[0].toUpperCase()}${mainFieldInput.value.slice(1)}`,
         active: true,
         id: counter,
     };
 
     counter++;
-    input.value = '';
+    mainFieldInput.value = '';
 
     if (document.querySelector('.completed-radio').checked === false) {
         createTodoItem(todo);
@@ -160,47 +157,33 @@ addButton.addEventListener('click', function(event) {
     todos.push(todo);
 })
 
-
-input.addEventListener('keypress', function(event) {
+mainFieldInput.addEventListener('keypress', (event) => {
     if (event.key === "Enter") {
         addButton.click();
     }
 })
 
 
-// радио выполненые
-const completedRadio = document.querySelector('.completed-radio');
-completedRadio.addEventListener('click', function(event) {
-    
+const sortRadios = document.getElementsByName('radio');
+let statusFilterValue;
+let statusActive;
+
+sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
     todolist.innerHTML = '';
-    const todosCompleted = todos.filter(todo => todo.active === false);
+    statusFilterValue = event.target.value;
 
-    todosCompleted.forEach(todo => createTodoItem(todo));
-})
+    statusFilterValue === 'active' ? statusActive = true : statusActive = false;
 
-
-// радио активные
-const activeRadio = document.querySelector('.active-radio');
-activeRadio.addEventListener('click', function(event) {
-    
-    todolist.innerHTML = '';
-    const todosActive = todos.filter(todo => todo.active === true);
-
-    todosActive.forEach(todo => createTodoItem(todo));
-})
+    if (statusFilterValue === 'all') {
+        todos.forEach(todo => createTodoItem(todo));
+    } else {
+        todos.filter(todo => todo.active === statusActive).forEach(todo => createTodoItem(todo));
+    }
+}))
 
 
-// радио весь лист
-const allRadio = document.querySelector('.all-radio');
-allRadio.addEventListener('click', function(event) {
-
-    todolist.innerHTML = '';
-    todos.forEach(todo => createTodoItem(todo));
-})
-
-
-// обработчик событий удалить
-clearButton.addEventListener('click', function(event) {
+// кнопка удалить
+clearButton.addEventListener('click', (event) => {
     todolist.innerHTML = '';
     todos.length = 0;
 })

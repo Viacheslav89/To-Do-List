@@ -69,7 +69,7 @@ function createTodoItem(todoItemObj) {
                 const index = todos.map(el => el.id).indexOf(Number(todoItem.id));
                 todos.splice(index, 1);
             }
-        });
+        })
 
         todoItem.remove();
     })    
@@ -92,7 +92,7 @@ function createTodoItem(todoItemObj) {
             if (todo.active === false && todo.id === Number(todoItem.id)) {
                 inputLi.classList.add('todo-list__text--completed');
             }
-        });
+        })
 
         const text = todoItem.querySelector('.todo-list__text').textContent;
         inputLi.value = text;
@@ -130,7 +130,7 @@ function createTodoItem(todoItemObj) {
             }
         })
     })
-
+    
     buttonEdit.append('..');
     todosWrapper.append(buttonEdit);
     
@@ -153,7 +153,10 @@ addButton.addEventListener('click', function(event) {
     counter++;
     input.value = '';
 
-    createTodoItem(todo);
+    if (document.querySelector('.completed-radio').checked === false) {
+        createTodoItem(todo);
+    }
+
     todos.push(todo);
 })
 
@@ -170,7 +173,7 @@ const completedRadio = document.querySelector('.completed-radio');
 completedRadio.addEventListener('click', function(event) {
     
     todolist.innerHTML = '';
-    let todosCompleted = todos.filter(todo => todo.active === false);
+    const todosCompleted = todos.filter(todo => todo.active === false);
 
     todosCompleted.forEach(todo => createTodoItem(todo));
 })
@@ -181,7 +184,7 @@ const activeRadio = document.querySelector('.active-radio');
 activeRadio.addEventListener('click', function(event) {
     
     todolist.innerHTML = '';
-    let todosActive = todos.filter(todo => todo.active === true);
+    const todosActive = todos.filter(todo => todo.active === true);
 
     todosActive.forEach(todo => createTodoItem(todo));
 })
@@ -196,7 +199,7 @@ allRadio.addEventListener('click', function(event) {
 })
 
 
-// удаляю все li с list
+// обработчик событий удалить
 clearButton.addEventListener('click', function(event) {
     todolist.innerHTML = '';
     todos.length = 0;

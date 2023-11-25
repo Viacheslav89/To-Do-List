@@ -167,18 +167,23 @@ mainFieldInput.addEventListener('keypress', (event) => {
 let statusFilterValue = 'all';
 
 function renderTodos() {
+    todolist.innerHTML = '';
+
+    let filteredTodos = [];
     if (statusFilterValue === 'active') {
-        todos.filter(todo => todo.active === true).forEach(todo => createTodoItem(todo));
-    } else if (statusFilterValue === 'completed') {
-        todos.filter(todo => todo.active === false).forEach(todo => createTodoItem(todo));
-    } else {
-        todos.forEach(todo => createTodoItem(todo));
+        filteredTodos = todos.filter(todo => todo.active === true);
+    } 
+    if (statusFilterValue === 'completed') {
+        filteredTodos = todos.filter(todo => todo.active === false);
     }
+    if (statusFilterValue === 'all') {
+        filteredTodos = todos;
+    }
+    filteredTodos.forEach(todo => createTodoItem(todo));
 }
 
 const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
-    todolist.innerHTML = '';
     statusFilterValue = event.target.value;
     renderTodos();
 }))

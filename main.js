@@ -164,21 +164,23 @@ mainFieldInput.addEventListener('keypress', (event) => {
 })
 
 
-const sortRadios = document.getElementsByName('radio');
-let statusFilterValue;
-let statusActive;
+let statusFilterValue = 'all';
 
+function renderTodos() {
+    if (statusFilterValue === 'active') {
+        todos.filter(todo => todo.active === true).forEach(todo => createTodoItem(todo));
+    } else if (statusFilterValue === 'completed') {
+        todos.filter(todo => todo.active === false).forEach(todo => createTodoItem(todo));
+    } else {
+        todos.forEach(todo => createTodoItem(todo));
+    }
+}
+
+const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
     todolist.innerHTML = '';
     statusFilterValue = event.target.value;
-
-    statusFilterValue === 'active' ? statusActive = true : statusActive = false;
-
-    if (statusFilterValue === 'all') {
-        todos.forEach(todo => createTodoItem(todo));
-    } else {
-        todos.filter(todo => todo.active === statusActive).forEach(todo => createTodoItem(todo));
-    }
+    renderTodos();
 }))
 
 

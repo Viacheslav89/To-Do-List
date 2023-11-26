@@ -169,16 +169,14 @@ let statusFilterValue = 'all';
 function renderTodos() {
     todolist.innerHTML = '';
 
-    let filteredTodos = [];
+    let filteredTodos = todos;
     if (statusFilterValue === 'active') {
-        filteredTodos = todos.filter(todo => todo.active === true);
+        filteredTodos = todos.filter(todo => todo.active);
     } 
     if (statusFilterValue === 'completed') {
-        filteredTodos = todos.filter(todo => todo.active === false);
+        filteredTodos = todos.filter(todo => !todo.active);
     }
-    if (statusFilterValue === 'all') {
-        filteredTodos = todos;
-    }
+
     filteredTodos.forEach(todo => createTodoItem(todo));
 }
 

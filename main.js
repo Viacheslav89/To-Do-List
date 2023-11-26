@@ -3,8 +3,9 @@ const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
 
-const todos = [];
+const todos = JSON.parse(localStorage.getItem('items')) || [];
 let counter = 1;
+console.log(todos)
 
 
 function createTodoItem(todoItemObj) {
@@ -38,6 +39,7 @@ function createTodoItem(todoItemObj) {
             todos.forEach((todo) => {
                 if (todo.id === +todoItem.id) {
                     todo.active = false;
+                    localStorage.setItem('items', JSON.stringify(todos));
                 }
             })
         } else {
@@ -45,6 +47,7 @@ function createTodoItem(todoItemObj) {
             todos.forEach((todo) => {
                 if (todo.id === +todoItem.id) {
                     todo.active = true;
+                    localStorage.setItem('items', JSON.stringify(todos));
                 }
             })
         }
@@ -66,9 +69,11 @@ function createTodoItem(todoItemObj) {
 
         todos.forEach((todo, index) => {
             todos.splice(index, 1);
+            // localStorage.removeItem('items');
         })
-
         todoItem.remove();
+        // localStorage.clear();
+        // localStorage.setItem('items', JSON.stringify(todos));
     })    
 
     const buttonEdit = document.createElement('button');
@@ -117,6 +122,7 @@ function createTodoItem(todoItemObj) {
                 if (todo.id === +todoItem.id) {
                     const index = todos.map(el => el.id).indexOf(+todoItem.id);
                     todos[index].text = todoEditInput.value;
+                    localStorage.setItem('items', JSON.stringify(todos));
                 }
             })
         })
@@ -155,6 +161,7 @@ addButton.addEventListener('click', (event) => {
     }
 
     todos.push(todo);
+    localStorage.setItem('items', JSON.stringify(todos));
 })
 
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -191,4 +198,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
 clearButton.addEventListener('click', (event) => {
     todolist.innerHTML = '';
     todos.length = 0;
+    localStorage.clear();
 })
+
+todos.forEach(todo => createTodoItem(todo));

@@ -9,16 +9,23 @@ let counter = 1;
 
 
 // создать кнопку выполнить
-function createBtnCompleted(event) {
-    const todoItem = event.target.closest('li');
+function actionBtnCompleted(event) {
+    const todoItem = event.target.closest('.todo-list__item');
+    console.log(todoItem);
+    
+    if(todolist.classList.contains('edit')) return;
 
     if (!todoItem.classList.contains('todo-list__text--completed')) {
         todoItem.classList.toggle('todo-list__text--completed');
         todos.forEach((todo) => {
-            if (todo.id === +todoItem.id) {
-                todo.active = false;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
+            
+
+
+
+            // if (todo.id === +todoItem.id) {
+            //     todo.active = false;
+            //     localStorage.setItem('items', JSON.stringify(todos));
+            // }
         })
     } else {
         todoItem.classList.toggle('todo-list__text--completed');
@@ -29,7 +36,7 @@ function createBtnCompleted(event) {
             }
         })
     }
-    if (document.querySelector('.active-radio').checked) {
+    if (document.querySelector('#active-radio').checked) {
         todoItem.remove();
     }
 }
@@ -37,8 +44,9 @@ function createBtnCompleted(event) {
 
 
 // создать кнопку удалить
-function createBtnDel(event) {
-    const todoItem = event.target.closest('li');
+function actionBtnDel(event) {
+    const todoItem = event.target.closest('.todo-list__item');
+    if(todolist.classList.contains('edit')) return;
 
     todos.forEach((todo) => {
         if (todo.id === +todoItem.id) {
@@ -55,8 +63,8 @@ function createBtnDel(event) {
 
 
 // создать кнопку редактировать
-function createBtnEdit(event) {
-    const todoItem = event.target.closest('li');
+function actionBtnEdit(event) {
+    const todoItem = event.target.closest('.todo-list__item');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
     if(todolist.classList.contains('edit')) return;
 
@@ -138,7 +146,7 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий выполнено
-    buttonCompleted.addEventListener('click', createBtnCompleted);
+    buttonCompleted.addEventListener('click', actionBtnCompleted);
 
     const buttonDel = document.createElement('button');
     buttonDel.classList.add('button', 'btn-del');
@@ -148,7 +156,7 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий удалить
-    buttonDel.addEventListener('click', createBtnDel);
+    buttonDel.addEventListener('click', actionBtnDel);
     
     const buttonEdit = document.createElement('button');
     buttonEdit.classList.add('button', 'btn-edit');
@@ -156,7 +164,7 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий редактировать
-    buttonEdit.addEventListener('click', createBtnEdit);
+    buttonEdit.addEventListener('click', actionBtnEdit);
     
     buttonEdit.append('..');
     todosWrapper.append(buttonEdit);

@@ -13,7 +13,7 @@ function createBtnCompleted(event) {
     const todoItem = event.target.closest('li');
 
     if (!todoItem.classList.contains('todo-list__text--completed')) {
-        todoItem.classList.add('todo-list__text--completed');
+        todoItem.classList.toggle('todo-list__text--completed');
         todos.forEach((todo) => {
             if (todo.id === +todoItem.id) {
                 todo.active = false;
@@ -21,7 +21,7 @@ function createBtnCompleted(event) {
             }
         })
     } else {
-        todoItem.classList.remove('todo-list__text--completed');
+        todoItem.classList.toggle('todo-list__text--completed');
         todos.forEach((todo) => {
             if (todo.id === +todoItem.id) {
                 todo.active = true;
@@ -58,8 +58,10 @@ function createBtnDel(event) {
 function createBtnEdit(event) {
     const todoItem = event.target.closest('li');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
+    if(todolist.classList.contains('edit')) return;
 
-    if (btnWrapper.childNodes.length === 4) return;
+    [...todoItem.getElementsByClassName('button')].forEach(i => i.classList.add('hidden'));
+    todolist.classList.add('edit');
 
     const todoEditInput = document.createElement('input');
     todoEditInput.classList.add('todo-list-item__input');
@@ -85,6 +87,8 @@ function createBtnEdit(event) {
     todoEditInput.focus();
     
     buttonOk.addEventListener('click', (event) => {
+        [...document.getElementsByClassName('button')].forEach(i => i.classList.remove('hidden'));
+        todolist.classList.remove('edit');
         if (event.target.classList.contains('btn-ok')) {
             const text = todoEditInput.value;
             todoEditInput.remove();

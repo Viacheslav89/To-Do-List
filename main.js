@@ -5,9 +5,112 @@ const todolist = document.querySelector('.todo-list');
 
 const todos = JSON.parse(localStorage.getItem('items')) || [];
 let counter = 1;
-console.log(todos)
 
 
+
+// создать кнопку выполнить
+function createBtnCompleted(event) {
+    const todoItem = event.target.closest('li');
+
+    if (!todoItem.classList.contains('todo-list__text--completed')) {
+        todoItem.classList.add('todo-list__text--completed');
+        todos.forEach((todo) => {
+            if (todo.id === +todoItem.id) {
+                todo.active = false;
+                localStorage.setItem('items', JSON.stringify(todos));
+            }
+        })
+    } else {
+        todoItem.classList.remove('todo-list__text--completed');
+        todos.forEach((todo) => {
+            if (todo.id === +todoItem.id) {
+                todo.active = true;
+                localStorage.setItem('items', JSON.stringify(todos));
+            }
+        })
+    }
+    if (document.querySelector('.active-radio').checked) {
+        todoItem.remove();
+    }
+}
+
+
+
+// создать кнопку удалить
+function createBtnDel(event) {
+    const todoItem = event.target.closest('li');
+
+    todos.forEach((todo) => {
+        if (todo.id === +todoItem.id) {
+            const index = todos.map(el => el.id).indexOf(+todoItem.id);
+            todos.splice(index, 1);
+            // JSON.parse(localStorage.getItem('items')).splice(index, 1);
+            //  из localStorage при удалении пока не удаляет 
+        }
+    })
+    
+    todoItem.remove();
+}
+
+
+
+// создать кнопку редактировать
+function createBtnEdit(event) {
+    const todoItem = event.target.closest('li');
+    const btnWrapper = event.target.closest('.todo-list__wrapper');
+
+    if (btnWrapper.childNodes.length === 4) return;
+
+    const todoEditInput = document.createElement('input');
+    todoEditInput.classList.add('todo-list-item__input');
+
+    todos.forEach((todo) => {
+        if (!todo.active && todo.id === +todoItem.id) {
+            todoEditInput.classList.add('todo-list__text--completed');
+        }
+    })
+
+    const text = todoItem.querySelector('.todo-list__text').textContent;
+    todoEditInput.value = text;
+
+    const buttonOk = document.createElement('button');
+    buttonOk.classList.add('button', 'btn-ok');
+    buttonOk.append('ok');
+    btnWrapper.prepend(buttonOk);
+
+    const textBox = event.target.closest('li').querySelector('.todo-list__text');
+
+    textBox.innerHTML = '';
+    textBox.append(todoEditInput);
+    todoEditInput.focus();
+    
+    buttonOk.addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-ok')) {
+            const text = todoEditInput.value;
+            todoEditInput.remove();
+            textBox.innerHTML = text;
+            buttonOk.remove();
+        }
+
+        todos.forEach((todo) => {
+            if (todo.id === +todoItem.id) {
+                const index = todos.map(el => el.id).indexOf(+todoItem.id);
+                todos[index].text = todoEditInput.value;
+                localStorage.setItem('items', JSON.stringify(todos));
+            }
+        })
+    })
+    
+    todoEditInput.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+            buttonOk.click();
+        }
+    })
+}
+
+
+
+// создаем новый todo
 function createTodoItem(todoItemObj) {
     const todoItem = document.createElement('li');
     todoItem.classList.add('todo-list__item');
@@ -17,7 +120,7 @@ function createTodoItem(todoItemObj) {
     todoText.classList.add('todo-list__text');
     todoText.append(todoItemObj.text);
 
-    if (todoItemObj.active === false) {
+    if (!todoItemObj.active) {
         todoText.classList.add('todo-list__text--completed');
     }
 
@@ -31,31 +134,7 @@ function createTodoItem(todoItemObj) {
 
 
     // обработчик событий выполнено
-    buttonCompleted.addEventListener('click', (event) => {
-        const todoItem = event.target.closest('li');
-
-        if (!todoItem.classList.contains('todo-list__text--completed')) {
-            todoItem.classList.add('todo-list__text--completed');
-            todos.forEach((todo) => {
-                if (todo.id === +todoItem.id) {
-                    todo.active = false;
-                    localStorage.setItem('items', JSON.stringify(todos));
-                }
-            })
-        } else {
-            todoItem.classList.remove('todo-list__text--completed');
-            todos.forEach((todo) => {
-                if (todo.id === +todoItem.id) {
-                    todo.active = true;
-                    localStorage.setItem('items', JSON.stringify(todos));
-                }
-            })
-        }
-
-        if (document.querySelector('.active-radio').checked) {
-            todoItem.remove();
-        }
-    })   
+    buttonCompleted.addEventListener('click', createBtnCompleted);
 
     const buttonDel = document.createElement('button');
     buttonDel.classList.add('button', 'btn-del');
@@ -63,76 +142,17 @@ function createTodoItem(todoItemObj) {
     todosWrapper.append(buttonDel);
 
 
+
     // обработчик событий удалить
-    buttonDel.addEventListener('click', (event) => {
-        const todoItem = event.target.closest('li');
-
-        todos.forEach((todo, index) => {
-            todos.splice(index, 1);
-            // localStorage.removeItem('items');
-        })
-        todoItem.remove();
-        // localStorage.clear();
-        // localStorage.setItem('items', JSON.stringify(todos));
-    })    
-
+    buttonDel.addEventListener('click', createBtnDel);
+    
     const buttonEdit = document.createElement('button');
     buttonEdit.classList.add('button', 'btn-edit');
 
 
+
     // обработчик событий редактировать
-    buttonEdit.addEventListener('click', (event) => {
-        const todoItem = event.target.closest('li');
-        const btnWrapper = event.target.closest('.todo-list__wrapper');
-
-        if (btnWrapper.childNodes.length === 4) return;
-
-        const todoEditInput = document.createElement('input');
-        todoEditInput.classList.add('todo-list-item__input');
-
-        todos.forEach((todo) => {
-            if (todo.active === false && todo.id === +todoItem.id) {
-                todoEditInput.classList.add('todo-list__text--completed');
-            }
-        })
-
-        const text = todoItem.querySelector('.todo-list__text').textContent;
-        todoEditInput.value = text;
-
-        const buttonOk = document.createElement('button');
-        buttonOk.classList.add('button', 'btn-ok');
-        buttonOk.append('ok');
-        btnWrapper.prepend(buttonOk);
-
-        const textBox = event.target.closest('li').querySelector('.todo-list__text');
-
-        textBox.innerHTML = '';
-        textBox.append(todoEditInput);
-        todoEditInput.focus();
-        
-        buttonOk.addEventListener('click', (event) => {
-            if (event.target.classList.contains('btn-ok')) {
-                const text = todoEditInput.value;
-                todoEditInput.remove();
-                textBox.innerHTML = text;
-                buttonOk.remove();
-            }
-
-            todos.forEach((todo) => {
-                if (todo.id === +todoItem.id) {
-                    const index = todos.map(el => el.id).indexOf(+todoItem.id);
-                    todos[index].text = todoEditInput.value;
-                    localStorage.setItem('items', JSON.stringify(todos));
-                }
-            })
-        })
-        
-        todoEditInput.addEventListener('keypress', (event) => {
-            if (event.key === "Enter") {
-                buttonOk.click();
-            }
-        })
-    })
+    buttonEdit.addEventListener('click', createBtnEdit);
     
     buttonEdit.append('..');
     todosWrapper.append(buttonEdit);
@@ -141,6 +161,7 @@ function createTodoItem(todoItemObj) {
     todoItem.append(todosWrapper);
     todolist.append(todoItem);
 }
+
 
 
 // обработчик событий добавить
@@ -156,12 +177,13 @@ addButton.addEventListener('click', (event) => {
     counter++;
     mainFieldInput.value = '';
 
-    if (document.querySelector('.completed-radio').checked === false) {
+    if (!document.querySelector('.completed-radio').checked) {
         createTodoItem(todo);
     }
 
     todos.push(todo);
     localStorage.setItem('items', JSON.stringify(todos));
+    // console.log(localStorage.getItem('items', JSON.stringify(todos)));
 })
 
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -169,6 +191,7 @@ mainFieldInput.addEventListener('keypress', (event) => {
         addButton.click();
     }
 })
+
 
 
 let statusFilterValue = 'all';
@@ -192,6 +215,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
     statusFilterValue = event.target.value;
     renderTodos();
 }))
+
 
 
 // кнопка удалить

@@ -10,7 +10,6 @@ let counter = 1;
 
 // кнопка выполнить
 function completedTodo(currentTodo) {
-    console.log(currentTodo);
     
     // if (todolist.classList.contains('edit')) return;
     if (currentTodo.active) {
@@ -35,21 +34,28 @@ function completedTodo(currentTodo) {
 
 
 // кнопка удалить
-function deleteTodo(todo) {
+function deleteTodo(currentTodo) {
     todolist.innerHTML = '';
-    todos = todos.filter(currentTodo => currentTodo.id !== todo.id);
+    todos = todos.filter(todo => todo.id !== currentTodo.id);
     renderTodos();
+
+    JSON.parse(localStorage.getItem('items')).forEach((obj, index) => {
+        if (obj.id === currentTodo.id) {
+            JSON.parse(localStorage.getItem('items')).splice(index, 1);
+        }
+        localStorage.setItem('items', JSON.stringify(todos));
+    })
 }
 
 
 
 // кнопка редактировать
-function actionBtnEdit(todoItemObj) {
+function actionBtnEdit(event) {
     const todoItem = event.target.closest('.todo-list__item');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
-    if (todolist.classList.contains('edit')) return;
+    // if (todolist.classList.contains('edit')) return;
 
-    [...todoItem.getElementsByClassName('button')].forEach(i => i.classList.add('hidden'));
+    [...todoItem.getElementsByClassName('button')].forEach(btn => btn.classList.add('hidden'));
     todolist.classList.add('edit');
 
     const todoEditInput = document.createElement('input');
@@ -70,7 +76,7 @@ function actionBtnEdit(todoItemObj) {
     todoEditInput.focus();
     
     buttonOk.addEventListener('click', (event) => {
-        [...document.getElementsByClassName('button')].forEach(i => i.classList.remove('hidden'));
+        [...document.getElementsByClassName('button')].forEach(btn => btn.classList.remove('hidden'));
         todolist.classList.remove('edit');
         if (event.target.classList.contains('btn-ok')) {
             const text = todoEditInput.value;

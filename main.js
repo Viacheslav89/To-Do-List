@@ -3,82 +3,57 @@ const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
 
-const todos = JSON.parse(localStorage.getItem('items')) || [];
+let todos = JSON.parse(localStorage.getItem('items')) || [];
 let counter = 1;
 
 
 
-// создать кнопку выполнить
-function actionBtnCompleted(event) {
-    const todoItem = event.target.closest('.todo-list__item');
-    console.log(todoItem);
+// кнопка выполнить
+function completedTodo(currentTodo) {
+    console.log(currentTodo);
     
-    if(todolist.classList.contains('edit')) return;
-
-    if (!todoItem.classList.contains('todo-list__text--completed')) {
-        todoItem.classList.toggle('todo-list__text--completed');
-        todos.forEach((todo) => {
-            
-
-
-
-            // if (todo.id === +todoItem.id) {
-            //     todo.active = false;
-            //     localStorage.setItem('items', JSON.stringify(todos));
-            // }
+    // if (todolist.classList.contains('edit')) return;
+    if (currentTodo.active) {
+        todos.forEach(todo => {
+            if (todo.id === currentTodo.id) {
+                todo.active = false;
+                localStorage.setItem('items', JSON.stringify(todos));
+            }
         })
     } else {
-        todoItem.classList.toggle('todo-list__text--completed');
-        todos.forEach((todo) => {
-            if (todo.id === +todoItem.id) {
+        todos.forEach(todo => {
+            if (todo.id === currentTodo.id) {
                 todo.active = true;
                 localStorage.setItem('items', JSON.stringify(todos));
             }
         })
     }
-    if (document.querySelector('#active-radio').checked) {
-        todoItem.remove();
-    }
+
+    todolist.innerHTML = '';
+    renderTodos();
+}
+
+
+// кнопка удалить
+function deleteTodo(todo) {
+    todolist.innerHTML = '';
+    todos = todos.filter(currentTodo => currentTodo.id !== todo.id);
+    renderTodos();
 }
 
 
 
-// создать кнопку удалить
-function actionBtnDel(event) {
-    const todoItem = event.target.closest('.todo-list__item');
-    if(todolist.classList.contains('edit')) return;
-
-    todos.forEach((todo) => {
-        if (todo.id === +todoItem.id) {
-            const index = todos.map(el => el.id).indexOf(+todoItem.id);
-            todos.splice(index, 1);
-            // JSON.parse(localStorage.getItem('items')).splice(index, 1);
-            //  из localStorage при удалении пока не удаляет 
-        }
-    })
-    
-    todoItem.remove();
-}
-
-
-
-// создать кнопку редактировать
-function actionBtnEdit(event) {
+// кнопка редактировать
+function actionBtnEdit(todoItemObj) {
     const todoItem = event.target.closest('.todo-list__item');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
-    if(todolist.classList.contains('edit')) return;
+    if (todolist.classList.contains('edit')) return;
 
     [...todoItem.getElementsByClassName('button')].forEach(i => i.classList.add('hidden'));
     todolist.classList.add('edit');
 
     const todoEditInput = document.createElement('input');
     todoEditInput.classList.add('todo-list-item__input');
-
-    todos.forEach((todo) => {
-        if (!todo.active && todo.id === +todoItem.id) {
-            todoEditInput.classList.add('todo-list__text--completed');
-        }
-    })
 
     const text = todoItem.querySelector('.todo-list__text').textContent;
     todoEditInput.value = text;
@@ -103,7 +78,7 @@ function actionBtnEdit(event) {
             textBox.innerHTML = text;
             buttonOk.remove();
         }
-
+        
         todos.forEach((todo) => {
             if (todo.id === +todoItem.id) {
                 const index = todos.map(el => el.id).indexOf(+todoItem.id);
@@ -139,33 +114,29 @@ function createTodoItem(todoItemObj) {
     const todosWrapper = document.createElement('div');
     todosWrapper.classList.add('todo-list__wrapper');
 
+
+// выполнить
     const buttonCompleted = document.createElement('button');
     buttonCompleted.classList.add('button', 'btn-completed');
     buttonCompleted.append('V');
     todosWrapper.append(buttonCompleted);
+    buttonCompleted.addEventListener('click', () => completedTodo(todoItemObj));
 
 
-    // обработчик событий выполнено
-    buttonCompleted.addEventListener('click', actionBtnCompleted);
-
+// удалить
     const buttonDel = document.createElement('button');
     buttonDel.classList.add('button', 'btn-del');
     buttonDel.append('X');
     todosWrapper.append(buttonDel);
-
-
-
-    // обработчик событий удалить
-    buttonDel.addEventListener('click', actionBtnDel);
+    buttonDel.addEventListener('click', () => deleteTodo(todoItemObj));
     
+
+// редактировать
     const buttonEdit = document.createElement('button');
     buttonEdit.classList.add('button', 'btn-edit');
-
-
-
-    // обработчик событий редактировать
     buttonEdit.addEventListener('click', actionBtnEdit);
     
+
     buttonEdit.append('..');
     todosWrapper.append(buttonEdit);
     
@@ -176,8 +147,8 @@ function createTodoItem(todoItemObj) {
 
 
 
-// обработчик событий добавить
-addButton.addEventListener('click', (event) => {
+// кнопка добавить
+addButton.addEventListener('click', () => {
     if (!mainFieldInput.value) return;
     
     const todo = {
@@ -195,7 +166,6 @@ addButton.addEventListener('click', (event) => {
 
     todos.push(todo);
     localStorage.setItem('items', JSON.stringify(todos));
-    // console.log(localStorage.getItem('items', JSON.stringify(todos)));
 })
 
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -230,7 +200,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
 
 
 
-// кнопка удалить
+// кнопка очистить
 clearButton.addEventListener('click', (event) => {
     todolist.innerHTML = '';
     todos.length = 0;

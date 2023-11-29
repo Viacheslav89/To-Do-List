@@ -11,7 +11,7 @@ let counter = 1;
 // кнопка выполнить
 function completedTodo(currentTodo) {
     
-    // if (todolist.classList.contains('edit')) return;
+    if (todolist.classList.contains('edit')) return;
     if (currentTodo.active) {
         todos.forEach(todo => {
             if (todo.id === currentTodo.id) {
@@ -28,14 +28,14 @@ function completedTodo(currentTodo) {
         })
     }
 
-    todolist.innerHTML = '';
     renderTodos();
 }
 
 
 // кнопка удалить
 function deleteTodo(currentTodo) {
-    todolist.innerHTML = '';
+    if (todolist.classList.contains('edit')) return;
+
     todos = todos.filter(todo => todo.id !== currentTodo.id);
     renderTodos();
 
@@ -50,16 +50,22 @@ function deleteTodo(currentTodo) {
 
 
 // кнопка редактировать
-function actionBtnEdit(event) {
+function actionBtnEdit(event, currentTodo) {
     const todoItem = event.target.closest('.todo-list__item');
     const btnWrapper = event.target.closest('.todo-list__wrapper');
-    // if (todolist.classList.contains('edit')) return;
+    if (todolist.classList.contains('edit')) return;
 
     [...todoItem.getElementsByClassName('button')].forEach(btn => btn.classList.add('hidden'));
     todolist.classList.add('edit');
 
     const todoEditInput = document.createElement('input');
     todoEditInput.classList.add('todo-list-item__input');
+
+    todos.forEach((todo) => {
+        if (!todo.active && todo.id === currentTodo.id) {
+            todoEditInput.classList.add('todo-list__text--completed');
+        }
+    })
 
     const text = todoItem.querySelector('.todo-list__text').textContent;
     todoEditInput.value = text;
@@ -86,8 +92,8 @@ function actionBtnEdit(event) {
         }
         
         todos.forEach((todo) => {
-            if (todo.id === +todoItem.id) {
-                const index = todos.map(el => el.id).indexOf(+todoItem.id);
+            if (todo.id === currentTodo.id) {
+                const index = todos.map(el => el.id).indexOf(currentTodo.id);
                 todos[index].text = todoEditInput.value;
                 localStorage.setItem('items', JSON.stringify(todos));
             }
@@ -107,7 +113,6 @@ function actionBtnEdit(event) {
 function createTodoItem(todoItemObj) {
     const todoItem = document.createElement('li');
     todoItem.classList.add('todo-list__item');
-    todoItem.id = todoItemObj.id;
 
     const todoText = document.createElement('p');
     todoText.classList.add('todo-list__text');
@@ -140,7 +145,9 @@ function createTodoItem(todoItemObj) {
 // редактировать
     const buttonEdit = document.createElement('button');
     buttonEdit.classList.add('button', 'btn-edit');
-    buttonEdit.addEventListener('click', actionBtnEdit);
+    buttonEdit.addEventListener('click', (event) => {
+        actionBtnEdit(event, todoItemObj);
+    });
     
 
     buttonEdit.append('..');
@@ -207,7 +214,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
 
 
 // кнопка очистить
-clearButton.addEventListener('click', (event) => {
+clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
     todos.length = 0;
     localStorage.clear();

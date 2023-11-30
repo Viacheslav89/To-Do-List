@@ -4,7 +4,7 @@ const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
 
 let todos = JSON.parse(localStorage.getItem('items')) || [];
-let counter = 1;
+let counter = localStorage.getItem('counter') || 1;
 
 
 
@@ -167,11 +167,11 @@ addButton.addEventListener('click', () => {
     const todo = {
         text: `${mainFieldInput.value[0].toUpperCase()}${mainFieldInput.value.slice(1)}`,
         active: true,
-        id: counter,
+        id: localStorage.getItem('counter') || counter,
     };
 
-    counter++;
     mainFieldInput.value = '';
+    localStorage.setItem('counter', JSON.stringify(++counter));
 
     if (!document.querySelector('.completed-radio').checked) {
         createTodoItem(todo);

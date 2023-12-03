@@ -123,8 +123,15 @@ body {
 }
 
 .btn-ok {
-    width: 75px;
-    background-color: rgb(192, 192, 246);
+    width: 37.5px;
+    background-color: rgb(114, 173, 41);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.btn-cancel {
+    width: 37.5px;
+    background-color: rgb(246, 61, 61);
     font-size: 12px;
     font-weight: bold;
 }

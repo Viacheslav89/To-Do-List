@@ -48,63 +48,91 @@ function editTodo(currentTodo) {
 }
 
 
-// создаем новый todo
-function createTodoTemplate(todo) {
+function editor(todo) {
+    const todoEditInput = document.createElement('input');
+    todoEditInput.classList.add('todo-list-item__input');
+
+    if (!todo.active) {
+        todoEditInput.classList.add('todo-list__text--completed');
+    }
+
+    todoEditInput.value = todo.text;
+    setTimeout(() => {
+        todoEditInput.focus();
+    }, 0);
+    
+    return todoEditInput;
+}
+
+
+function createEditTemplate(todo) {
     const todoItem = document.createElement('li');
     todoItem.classList.add('todo-list__item');
 
-    const todosWrapper = document.createElement('div');
-    todosWrapper.classList.add('todo-list__wrapper');
+    const todoWrapper = document.createElement('div');
+    todoWrapper.classList.add('todo-list__wrapper');
 
     const todoText = document.createElement('p');
     todoText.classList.add('todo-list__text');
 
+    const todoEditInput = editor(todo);
+    todoText.append(todoEditInput);
+    
+    const buttonCancel = document.createElement('button');
+    buttonCancel.classList.add('button', 'btn-cancel');
+    buttonCancel.append('off');
+    todoWrapper.prepend(buttonCancel);
+
+    const buttonOk = document.createElement('button');
+    buttonOk.classList.add('button', 'btn-ok');
+    buttonOk.append('ok');
+    todoWrapper.prepend(buttonOk);
+
+    buttonOk.addEventListener('click', () => {        
+        todos.forEach((todoItem, index) => {
+            if (todoItem.id === todo.id) {
+                todos[index].text = todoEditInput.value;
+                localStorage.setItem('items', JSON.stringify(todos));
+            }
+        })
+        editTodoId = null;
+        renderTodos();
+    })
+
+    buttonCancel.addEventListener('click', () => {
+        editTodoId = null;
+        renderTodos();
+    })
+    
+    todoEditInput.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+            buttonOk.click();
+        }
+    })
+
+    todoItem.append(todoText);
+    todoItem.append(todoWrapper);
+    todolist.append(todoItem);
+}
+
+
+// создаем новый todo
+function createTodoTemplate(todo) {
     const isEdit = todo.id === editTodoId;
     
     if (isEdit) {
-        const todoEditInput = document.createElement('input');
-        todoEditInput.classList.add('todo-list-item__input');
+        createEditTemplate(todo);
 
-        todos.forEach((todoItem) => {
-            if (!todoItem.active && todoItem.id === todo.id) {
-                todoEditInput.classList.add('todo-list__text--completed');
-            }
-        })
-
-        todoEditInput.value = todo.text;
-        todoText.append(todoEditInput);
-        setTimeout(() => {
-            todoEditInput.focus();
-          }, 0);
-  
-
-        const buttonOk = document.createElement('button');
-        buttonOk.classList.add('button', 'btn-ok');
-        buttonOk.append('ok');
-        todosWrapper.prepend(buttonOk);
-
-        buttonOk.addEventListener('click', () => {
-            const textInput = todoEditInput.value;
-            todoEditInput.remove();
-            todoText.innerHTML = textInput;
-            buttonOk.remove();
-            
-            todos.forEach((todoItem, index) => {
-                if (todoItem.id === todo.id) {
-                    todos[index].text = todoEditInput.value;
-                    localStorage.setItem('items', JSON.stringify(todos));
-                }
-            })
-            editTodoId = null;
-            renderTodos();
-        })
-        
-        todoEditInput.addEventListener('keypress', (event) => {
-            if (event.key === "Enter") {
-                buttonOk.click();
-            }
-        })
     } else {
+        const todoItem = document.createElement('li');
+        todoItem.classList.add('todo-list__item');
+    
+        const todosWrapper = document.createElement('div');
+        todosWrapper.classList.add('todo-list__wrapper');
+    
+        const todoText = document.createElement('p');
+        todoText.classList.add('todo-list__text');
+
         todoText.append(todo.text);
 
         if (!todo.active) {
@@ -134,11 +162,13 @@ function createTodoTemplate(todo) {
         buttonEdit.addEventListener('click', () => editTodo(todo));
         buttonEdit.append('..');
         todosWrapper.append(buttonEdit);
+
+
+        todoItem.append(todoText);
+        todoItem.append(todosWrapper);
+        todolist.append(todoItem);
     }
 
-    todoItem.append(todoText);
-    todoItem.append(todosWrapper);
-    todolist.append(todoItem);
 }
 
 

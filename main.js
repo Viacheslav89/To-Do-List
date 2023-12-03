@@ -84,9 +84,9 @@ function createTodoTemplate(todo) {
         todosWrapper.prepend(buttonOk);
 
         buttonOk.addEventListener('click', () => {
-            const text = todoEditInput.value;
+            const textInput = todoEditInput.value;
             todoEditInput.remove();
-            todoText.innerHTML = text;
+            todoText.innerHTML = textInput;
             buttonOk.remove();
             
             todos.forEach((todoItem, index) => {

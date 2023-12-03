@@ -13,7 +13,6 @@ let editTodoId = null;
 
 // кнопка выполнить
 function completedTodo(currentTodo) {
-console.log(currentTodo.id);
     if (currentTodo.active) {
         todos.forEach(todo => {
             if (todo.id === currentTodo.id) {
@@ -47,7 +46,6 @@ function editTodo(currentTodo) {
     editTodoId = currentTodo.id;
     renderTodos();
 }
-
 
 
 // создаем новый todo
@@ -91,9 +89,8 @@ function createTodoTemplate(todo) {
             todoText.innerHTML = text;
             buttonOk.remove();
             
-            todos.forEach((todoItem) => {
+            todos.forEach((todoItem, index) => {
                 if (todoItem.id === todo.id) {
-                    const index = todos.map(el => el.id).indexOf(todo.id);
                     todos[index].text = todoEditInput.value;
                     localStorage.setItem('items', JSON.stringify(todos));
                 }

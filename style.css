@@ -30,6 +30,7 @@ body {
     padding-right: 10px;
 }
 
+
 .btn-wrapper {
     width: 225px;
     display: flex;
@@ -163,8 +164,8 @@ body {
         word-break: break-all;
     }
 
-    .input_li {
-        font-size: 15px;
+    .todo-list-item__input {
+        font-size: 16px;
     }
 }
 
@@ -188,8 +189,8 @@ body {
         word-break: break-all;
     }
 
-    .input_li {
-        font-size: 14px;
+    .todo-list-item__input {
+        font-size: 15px;
     }
 }
 
@@ -212,8 +213,8 @@ body {
         word-break: break-all;
     }
 
-    .input_li {
-        font-size: 14px;
+    .todo-list-item__input {
+        font-size: 15px;
     }
 }
 
@@ -242,8 +243,8 @@ body {
         word-break: break-all;
     }
 
-    .input_li {
-        font-size: 13px;
+    .todo-list-item__input {
+        font-size: 14px;
     }
 }
 
@@ -262,7 +263,7 @@ body {
     }
 
     .todo-list {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: bold;
         margin-left: 30px;
         width: 270px;
@@ -271,7 +272,7 @@ body {
         word-break: break-all;
     }
 
-    .input_li {
+    .todo-list-item__input {
         font-size: 13px;
     }
 

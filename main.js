@@ -6,11 +6,14 @@ const todolist = document.querySelector('.todo-list');
 let todos = JSON.parse(localStorage.getItem('items')) || [];
 let counter = localStorage.getItem('counter') || 1;
 
+let statusFilterValue = 'all';
+let editTodoId = null;
+
 
 
 // кнопка выполнить
 function completedTodo(currentTodo) {
-
+console.log(currentTodo.id);
     if (currentTodo.active) {
         todos.forEach(todo => {
             if (todo.id === currentTodo.id) {
@@ -39,121 +42,103 @@ function deleteTodo(currentTodo) {
 }
 
 
-// function editTodo(event, currentTodo) {
-//     const todoItem = event.target.closest('.todo-list__item');
-//     const btnWrapper = event.target.closest('.todo-list__wrapper');
-
-//     [...todoItem.getElementsByClassName('button')].forEach(btn => btn.classList.add('hidden'));
-
-//     const todoEditInput = document.createElement('input');
-//     todoEditInput.classList.add('todo-list-item__input');
-
-//     todos.forEach((todo) => {
-//         if (!todo.active && todo.id === currentTodo.id) {
-//             todoEditInput.classList.add('todo-list__text--completed');
-//         }
-//     })
-
-// }
-
-
 // кнопка редактировать
-function actionBtnEdit(event, currentTodo) {
-    const todoItem = event.target.closest('.todo-list__item');
-    const btnWrapper = event.target.closest('.todo-list__wrapper');
-
-    [...todoItem.getElementsByClassName('button')].forEach(btn => btn.classList.add('hidden'));
-
-    const todoEditInput = document.createElement('input');
-    todoEditInput.classList.add('todo-list-item__input');
-
-    todos.forEach((todo) => {
-        if (!todo.active && todo.id === currentTodo.id) {
-            todoEditInput.classList.add('todo-list__text--completed');
-        }
-    })
-
-    const text = todoItem.querySelector('.todo-list__text').textContent;
-    todoEditInput.value = text;
-
-    const buttonOk = document.createElement('button');
-    buttonOk.classList.add('button', 'btn-ok');
-    buttonOk.append('ok');
-    btnWrapper.prepend(buttonOk);
-
-    const textBox = event.target.closest('li').querySelector('.todo-list__text');
-
-    textBox.innerHTML = '';
-    textBox.append(todoEditInput);
-    todoEditInput.focus();
-    
-    buttonOk.addEventListener('click', () => {
-        [...todoItem.getElementsByClassName('button')].forEach(btn => btn.classList.remove('hidden'));
-        const text = todoEditInput.value;
-        todoEditInput.remove();
-        textBox.innerHTML = text;
-        buttonOk.remove();
-        
-        todos.forEach((todo) => {
-            if (todo.id === currentTodo.id) {
-                const index = todos.map(el => el.id).indexOf(currentTodo.id);
-                todos[index].text = todoEditInput.value;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
-        })
-    })
-    
-    todoEditInput.addEventListener('keypress', (event) => {
-        if (event.key === "Enter") {
-            buttonOk.click();
-        }
-    })
+function editTodo(currentTodo) {
+    editTodoId = currentTodo.id;
+    renderTodos();
 }
 
 
 
 // создаем новый todo
-function createTodoItem(todo) {
+function createTodoTemplate(todo) {
     const todoItem = document.createElement('li');
     todoItem.classList.add('todo-list__item');
-
-    const todoText = document.createElement('p');
-    todoText.classList.add('todo-list__text');
-    todoText.append(todo.text);
-
-    if (!todo.active) {
-        todoText.classList.add('todo-list__text--completed');
-    }
 
     const todosWrapper = document.createElement('div');
     todosWrapper.classList.add('todo-list__wrapper');
 
+    const todoText = document.createElement('p');
+    todoText.classList.add('todo-list__text');
 
-// выполнить
-    const buttonCompleted = document.createElement('button');
-    buttonCompleted.classList.add('button', 'btn-completed');
-    buttonCompleted.append('V');
-    todosWrapper.append(buttonCompleted);
-    buttonCompleted.addEventListener('click', () => completedTodo(todo));
-
-
-// удалить
-    const buttonDel = document.createElement('button');
-    buttonDel.classList.add('button', 'btn-del');
-    buttonDel.append('X');
-    todosWrapper.append(buttonDel);
-    buttonDel.addEventListener('click', () => deleteTodo(todo));
+    const isEdit = todo.id === editTodoId;
     
+    if (isEdit) {
+        const todoEditInput = document.createElement('input');
+        todoEditInput.classList.add('todo-list-item__input');
 
-// редактировать
-    const buttonEdit = document.createElement('button');
-    buttonEdit.classList.add('button', 'btn-edit');
-    buttonEdit.addEventListener('click', (event) => actionBtnEdit(event, todo));
-    
+        todos.forEach((todoItem) => {
+            if (!todoItem.active && todoItem.id === todo.id) {
+                todoEditInput.classList.add('todo-list__text--completed');
+            }
+        })
 
-    buttonEdit.append('..');
-    todosWrapper.append(buttonEdit);
-    
+        todoEditInput.value = todo.text;
+        todoText.append(todoEditInput);
+        setTimeout(() => {
+            todoEditInput.focus();
+          }, 0);
+  
+
+        const buttonOk = document.createElement('button');
+        buttonOk.classList.add('button', 'btn-ok');
+        buttonOk.append('ok');
+        todosWrapper.prepend(buttonOk);
+
+        buttonOk.addEventListener('click', () => {
+            const text = todoEditInput.value;
+            todoEditInput.remove();
+            todoText.innerHTML = text;
+            buttonOk.remove();
+            
+            todos.forEach((todoItem) => {
+                if (todoItem.id === todo.id) {
+                    const index = todos.map(el => el.id).indexOf(todo.id);
+                    todos[index].text = todoEditInput.value;
+                    localStorage.setItem('items', JSON.stringify(todos));
+                }
+            })
+            editTodoId = null;
+            renderTodos();
+        })
+        
+        todoEditInput.addEventListener('keypress', (event) => {
+            if (event.key === "Enter") {
+                buttonOk.click();
+            }
+        })
+    } else {
+        todoText.append(todo.text);
+
+        if (!todo.active) {
+            todoText.classList.add('todo-list__text--completed');
+        }
+
+
+        // выполнить
+        const buttonCompleted = document.createElement('button');
+        buttonCompleted.classList.add('button', 'btn-completed');
+        buttonCompleted.append('V');
+        todosWrapper.append(buttonCompleted);
+        buttonCompleted.addEventListener('click', () => completedTodo(todo));
+
+
+        // удалить
+        const buttonDel = document.createElement('button');
+        buttonDel.classList.add('button', 'btn-del');
+        buttonDel.append('X');
+        todosWrapper.append(buttonDel);
+        buttonDel.addEventListener('click', () => deleteTodo(todo));
+
+
+        // редактировать
+        const buttonEdit = document.createElement('button');
+        buttonEdit.classList.add('button', 'btn-edit');
+        buttonEdit.addEventListener('click', () => editTodo(todo));
+        buttonEdit.append('..');
+        todosWrapper.append(buttonEdit);
+    }
+
     todoItem.append(todoText);
     todoItem.append(todosWrapper);
     todolist.append(todoItem);
@@ -175,7 +160,7 @@ addButton.addEventListener('click', () => {
     localStorage.setItem('counter', JSON.stringify(++counter));
 
     if (!document.querySelector('.completed-radio').checked) {
-        createTodoItem(todo);
+        createTodoTemplate(todo);
     }
 
     todos.push(todo);
@@ -190,8 +175,6 @@ mainFieldInput.addEventListener('keypress', (event) => {
 
 
 
-let statusFilterValue = 'all';
-
 function renderTodos() {
     todolist.innerHTML = '';
 
@@ -203,7 +186,7 @@ function renderTodos() {
         filteredTodos = todos.filter(todo => !todo.active);
     }
 
-    filteredTodos.forEach(todo => createTodoItem(todo));
+    filteredTodos.forEach(todo => createTodoTemplate(todo));
 }
 
 const sortRadios = document.getElementsByName('radio');

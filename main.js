@@ -48,7 +48,16 @@ function editTodo(currentTodo) {
 }
 
 
-function editor(todo) {
+function createEditor(todo) {
+    const todoItem = document.createElement('li');
+    todoItem.classList.add('todo-list__item');
+
+    const todoWrapper = document.createElement('div');
+    todoWrapper.classList.add('todo-list__wrapper');
+
+    const todoText = document.createElement('p');
+    todoText.classList.add('todo-list__text');
+
     const todoEditInput = document.createElement('input');
     todoEditInput.classList.add('todo-list-item__input');
 
@@ -61,23 +70,6 @@ function editor(todo) {
         todoEditInput.focus();
     }, 0);
     
-    return todoEditInput;
-}
-
-
-function createEditTemplate(todo) {
-    const todoItem = document.createElement('li');
-    todoItem.classList.add('todo-list__item');
-
-    const todoWrapper = document.createElement('div');
-    todoWrapper.classList.add('todo-list__wrapper');
-
-    const todoText = document.createElement('p');
-    todoText.classList.add('todo-list__text');
-
-    const todoEditInput = editor(todo);
-    todoText.append(todoEditInput);
-    
     const buttonCancel = document.createElement('button');
     buttonCancel.classList.add('button', 'btn-cancel');
     buttonCancel.append('off');
@@ -88,15 +80,17 @@ function createEditTemplate(todo) {
     buttonOk.append('ok');
     todoWrapper.prepend(buttonOk);
 
+    todoText.append(todoEditInput);
+
     buttonOk.addEventListener('click', () => {        
-        todos.forEach((todoItem, index) => {
-            if (todoItem.id === todo.id) {
-                todos[index].text = todoEditInput.value;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
-        })
-        editTodoId = null;
-        renderTodos();
+    todos.forEach((todoItem, index) => {
+        if (todoItem.id === todo.id) {
+            todos[index].text = todoEditInput.value;
+            localStorage.setItem('items', JSON.stringify(todos));
+        }
+    })
+    editTodoId = null;
+    renderTodos();
     })
 
     buttonCancel.addEventListener('click', () => {
@@ -112,7 +106,16 @@ function createEditTemplate(todo) {
 
     todoItem.append(todoText);
     todoItem.append(todoWrapper);
-    todolist.append(todoItem);
+
+    return todoItem;
+}
+
+
+function createEditTemplate(todo) {
+    const editor = createEditor(todo);
+
+    todolist.append(editor);
+
 }
 
 

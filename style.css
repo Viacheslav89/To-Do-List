@@ -87,22 +87,30 @@ body {
     justify-content: space-between;
 }
 
+.content__wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .todo-list-item__input {
     width: 100%;
     background: transparent;
     border: 0;
     font-size: 16px;
     font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 1px solid black;
 }
 
 .todo-list__text {
     margin: 0;
     margin-bottom: 15px;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     width: 100%;
 }
 
-.todo-list__wrapper {
+.btn__wrapper {
     display: flex;
     width: 120px;
     justify-content: flex-end;
@@ -110,7 +118,7 @@ body {
 }
 
 
-.todo-list__text--completed {
+.text-completed {
     color: rgb(182, 5, 5);
 }
 

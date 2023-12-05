@@ -14,11 +14,8 @@ let editTodoId = null;
 // кнопка выполнить
 function completedTodo(currentTodo) {
     todos.forEach(todo => {
-        if (currentTodo.id !== todo.id) {
-            return;
-          }
-          
-          todo.active = !currentTodo.active;
+        if (currentTodo.id !== todo.id)  return;
+        todo.active = !currentTodo.active;
     })
 
     localStorage.setItem('items', JSON.stringify(todos));
@@ -35,7 +32,7 @@ function deleteTodo(currentTodo) {
 }
  
 // кнопка редактировать
-function editTodo(currentTodo) {
+function openTodoEditor(currentTodo) {
     editTodoId = currentTodo.id;
     renderTodos();
 }
@@ -141,7 +138,7 @@ function createTodoTemplate(todo) {
         // редактировать
         const buttonEdit = document.createElement('button');
         buttonEdit.classList.add('button', 'btn-edit');
-        buttonEdit.addEventListener('click', () => editTodo(todo));
+        buttonEdit.addEventListener('click', () => openTodoEditor(todo));
         buttonEdit.append('..');
         todosWrapper.append(buttonEdit);
  

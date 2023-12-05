@@ -10,26 +10,21 @@ let statusFilterValue = 'all';
 let editTodoId = null;
 
 
- 
+
 // кнопка выполнить
 function completedTodo(currentTodo) {
-    if (currentTodo.active) {
-        todos.forEach(todo => {
-            if (todo.id === currentTodo.id) {
-                todo.active = false;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
-        })
-    } else {
-        todos.forEach(todo => {
-            if (todo.id === currentTodo.id) {
-                todo.active = true;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
-        })
-    }
+    todos.forEach(todo => {
+        if (currentTodo.id !== todo.id) {
+            return;
+          }
+          
+          todo.active = !currentTodo.active;
+    })
+
+    localStorage.setItem('items', JSON.stringify(todos));
     renderTodos();
 }
+
  
 // кнопка удалить
 function deleteTodo(currentTodo) {
@@ -154,7 +149,7 @@ function createTodoTemplate(todo) {
         todoItem.append(todosWrapper);
     }
     
-    todolist.append(todoItem);
+    return todoItem;
 }
 
 
@@ -172,12 +167,10 @@ addButton.addEventListener('click', () => {
     mainFieldInput.value = '';
     localStorage.setItem('counter', JSON.stringify(++counter));
  
-    if (!document.querySelector('.completed-radio').checked) {
-        createTodoTemplate(todo);
-    }
- 
     todos.push(todo);
     localStorage.setItem('items', JSON.stringify(todos));
+
+    renderTodos();
 })
  
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -199,7 +192,7 @@ function renderTodos() {
         filteredTodos = todos.filter(todo => !todo.active);
     }
  
-    filteredTodos.forEach(todo => createTodoTemplate(todo));
+    filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
 }
  
 const sortRadios = document.getElementsByName('radio');

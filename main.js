@@ -137,12 +137,12 @@ function createTodoItem(todo) {
         todoItem.append(editTemplate);
 
     } else {
-        const todoText = document.createElement('p');
-        todoText.classList.add('todo-list__text');
-        todoText.append(todo.text);
+        const todoTemplateText = document.createElement('p');
+        todoTemplateText.classList.add('todo-list__text');
+        todoTemplateText.append(todo.text);
  
         if (!todo.active) {
-            todoText.classList.add('text-completed');
+            todoTemplateText.classList.add('text-completed');
         }
         
         const btnWrapper = createBtnTodo();
@@ -150,7 +150,7 @@ function createTodoItem(todo) {
         btnWrapper.querySelector('.btn-del').addEventListener('click', () => deleteTodo(todo));
         btnWrapper.querySelector('.btn-edit').addEventListener('click', () => openTodoEditor(todo));
  
-        todoItem.append(todoText);
+        todoItem.append(todoTemplateText);
         todoItem.append(btnWrapper);
     }
     

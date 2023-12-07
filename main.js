@@ -10,41 +10,53 @@ let statusFilterValue = 'all';
 let editTodoId = null;
 
 
+function changelocalStorage() {
+    localStorage.setItem('items', JSON.stringify(todos));
+}
+
 
 // кнопка выполнить
-function completedTodo(currentTodo) {
+function toggleTodoActive(currentTodo) {
     todos.forEach(todo => {
         if (currentTodo.id !== todo.id)  return;
         todo.active = !currentTodo.active;
     })
-
-    localStorage.setItem('items', JSON.stringify(todos));
+    changelocalStorage();
     renderTodos();
 }
 
- 
 // кнопка удалить
 function deleteTodo(currentTodo) {
     todos = todos.filter(todo => todo.id !== currentTodo.id);
     renderTodos();
- 
-    localStorage.setItem('items', JSON.stringify(todos));
+    changelocalStorage();
 }
- 
+
 // кнопка редактировать
 function openTodoEditor(currentTodo) {
     editTodoId = currentTodo.id;
     renderTodos();
 }
 
- 
+
+function changeTodoText(todo, todoEditInput) {
+    todos.forEach((todoItem) => {
+        if (todoItem.id === todo.id) {
+            todoItem.text = todoEditInput.value;
+            changelocalStorage();
+        }
+    })
+    editTodoId = null;
+    renderTodos();
+}
+
 
 function createEditTemplate(todo) {
     const editTemplate = document.createElement('div');
     editTemplate.classList.add('content__wrapper');
  
     const btnWrapper = document.createElement('div');
-    btnWrapper.classList.add('btn__wrapper');
+    btnWrapper.classList.add('btn-wrapper');
  
     const todoEditInput = document.createElement('input');
     todoEditInput.classList.add('todo-list-item__input');
@@ -71,16 +83,7 @@ function createEditTemplate(todo) {
 
     editTemplate.append(btnWrapper);
  
-    buttonOk.addEventListener('click', () => {        
-        todos.forEach((todoItem) => {
-            if (todoItem.id === todo.id) {
-                todoItem.text = todoEditInput.value;
-                localStorage.setItem('items', JSON.stringify(todos));
-            }
-        })
-        editTodoId = null;
-        renderTodos();
-    })
+    buttonOk.addEventListener('click', () => changeTodoText(todo, todoEditInput));
  
     buttonCancel.addEventListener('click', () => {
         editTodoId = null;
@@ -97,8 +100,33 @@ function createEditTemplate(todo) {
 }
  
 
+function createBtnTodo() {
+    const btnWrapper = document.createElement('div');
+    btnWrapper.classList.add('btn-wrapper');
+
+    const buttonCompleted = document.createElement('button');
+    buttonCompleted.classList.add('button', 'btn-completed');
+    buttonCompleted.append('V');
+
+    const buttonDel = document.createElement('button');
+    buttonDel.classList.add('button', 'btn-del');
+    buttonDel.append('X');
+
+    const buttonEdit = document.createElement('button');
+    buttonEdit.classList.add('button', 'btn-edit');
+    buttonEdit.append('..');
+
+    btnWrapper.append(buttonCompleted);
+    btnWrapper.append(buttonDel);
+    btnWrapper.append(buttonEdit);
+
+    return btnWrapper;
+}
+
+
+
 // создаем новый todo
-function createTodoTemplate(todo) {
+function createTodoItem(todo) {
     const isEdit = todo.id === editTodoId;
 
     const todoItem = document.createElement('li');
@@ -109,50 +137,29 @@ function createTodoTemplate(todo) {
         todoItem.append(editTemplate);
 
     } else {
-        const todosWrapper = document.createElement('div');
-        todosWrapper.classList.add('btn__wrapper');
-    
         const todoText = document.createElement('p');
         todoText.classList.add('todo-list__text');
- 
         todoText.append(todo.text);
  
         if (!todo.active) {
             todoText.classList.add('text-completed');
         }
- 
-        // выполнить
-        const buttonCompleted = document.createElement('button');
-        buttonCompleted.classList.add('button', 'btn-completed');
-        buttonCompleted.append('V');
-        todosWrapper.append(buttonCompleted);
-        buttonCompleted.addEventListener('click', () => completedTodo(todo));
- 
-        // удалить
-        const buttonDel = document.createElement('button');
-        buttonDel.classList.add('button', 'btn-del');
-        buttonDel.append('X');
-        todosWrapper.append(buttonDel);
-        buttonDel.addEventListener('click', () => deleteTodo(todo));
- 
-        // редактировать
-        const buttonEdit = document.createElement('button');
-        buttonEdit.classList.add('button', 'btn-edit');
-        buttonEdit.addEventListener('click', () => openTodoEditor(todo));
-        buttonEdit.append('..');
-        todosWrapper.append(buttonEdit);
+        
+        const btnWrapper = createBtnTodo();
+        btnWrapper.querySelector('.btn-completed').addEventListener('click', () => toggleTodoActive(todo));
+        btnWrapper.querySelector('.btn-del').addEventListener('click', () => deleteTodo(todo));
+        btnWrapper.querySelector('.btn-edit').addEventListener('click', () => openTodoEditor(todo));
  
         todoItem.append(todoText);
-        todoItem.append(todosWrapper);
+        todoItem.append(btnWrapper);
     }
     
     return todoItem;
 }
 
 
- 
-// кнопка добавить
-addButton.addEventListener('click', () => {
+
+function addTodo() {
     if (!mainFieldInput.value) return;
     
     const todo = {
@@ -165,19 +172,22 @@ addButton.addEventListener('click', () => {
     localStorage.setItem('counter', JSON.stringify(++counter));
  
     todos.push(todo);
-    localStorage.setItem('items', JSON.stringify(todos));
+    changelocalStorage();
 
     renderTodos();
-})
+}
  
 mainFieldInput.addEventListener('keypress', (event) => {
     if (event.key === "Enter") {
         addButton.click();
     }
 })
+ 
 
+addButton.addEventListener('click', addTodo);
 
  
+
 function renderTodos() {
     todolist.innerHTML = '';
  
@@ -189,7 +199,7 @@ function renderTodos() {
         filteredTodos = todos.filter(todo => !todo.active);
     }
  
-    filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
+    filteredTodos.forEach(todo => todolist.append(createTodoItem(todo)));
 }
  
 const sortRadios = document.getElementsByName('radio');

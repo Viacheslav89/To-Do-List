@@ -33,7 +33,7 @@ body {
 }
 
 
-.btn-wrapper {
+.button-wrapper {
     width: 225px;
     display: flex;
     justify-content: space-between;
@@ -110,7 +110,7 @@ body {
     width: 100%;
 }
 
-.btn__wrapper {
+.btn-wrapper {
     display: flex;
     width: 120px;
     justify-content: flex-end;

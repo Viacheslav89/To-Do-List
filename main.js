@@ -152,19 +152,19 @@ function createContentTemplate(todo) {
 function createTodoItem(todo) {
     const isEdit = todo.id === editTodoId;
 
-    const todoItem = document.createElement('li');
-    todoItem.classList.add('todo-list__item');
+    const todoTemplate = document.createElement('li');
+    todoTemplate.classList.add('todo-list__item');
     
     if (isEdit) {
         const editTemplate = createEditTemplate(todo);
-        todoItem.append(editTemplate);
+        todoTemplate.append(editTemplate);
 
     } else {
         const contentTemplate = createContentTemplate(todo);
-        todoItem.append(contentTemplate.todoTextEl);
-        todoItem.append(contentTemplate.btnWrapper);
+        todoTemplate.append(contentTemplate.todoTextEl);
+        todoTemplate.append(contentTemplate.btnWrapper);
     }
-    return todoItem;
+    return todoTemplate;
 }
 
 

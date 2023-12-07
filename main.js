@@ -39,6 +39,7 @@ function openTodoEditor(currentTodo) {
 }
 
 
+
 function changeTodoText(todo, todoEditInput) {
     todos.forEach((todoItem) => {
         if (todoItem.id === todo.id) {
@@ -125,6 +126,28 @@ function createBtnTodo() {
 
 
 
+function createContentTemplate(todo) {
+    const todoTextEl = document.createElement('p');
+    todoTextEl.classList.add('todo-list__text');
+    todoTextEl.append(todo.text);
+
+    if (!todo.active) {
+        todoTextEl.classList.add('text-completed');
+    }
+    
+    const btnWrapper = createBtnTodo();
+    btnWrapper.querySelector('.btn-completed').addEventListener('click', () => toggleTodoActive(todo));
+    btnWrapper.querySelector('.btn-del').addEventListener('click', () => deleteTodo(todo));
+    btnWrapper.querySelector('.btn-edit').addEventListener('click', () => openTodoEditor(todo));
+
+    return {
+        todoTextEl,
+        btnWrapper,
+    }
+}
+
+
+
 // создаем новый todo
 function createTodoItem(todo) {
     const isEdit = todo.id === editTodoId;
@@ -137,23 +160,10 @@ function createTodoItem(todo) {
         todoItem.append(editTemplate);
 
     } else {
-        const todoTemplateText = document.createElement('p');
-        todoTemplateText.classList.add('todo-list__text');
-        todoTemplateText.append(todo.text);
- 
-        if (!todo.active) {
-            todoTemplateText.classList.add('text-completed');
-        }
-        
-        const btnWrapper = createBtnTodo();
-        btnWrapper.querySelector('.btn-completed').addEventListener('click', () => toggleTodoActive(todo));
-        btnWrapper.querySelector('.btn-del').addEventListener('click', () => deleteTodo(todo));
-        btnWrapper.querySelector('.btn-edit').addEventListener('click', () => openTodoEditor(todo));
- 
-        todoItem.append(todoTemplateText);
-        todoItem.append(btnWrapper);
+        const contentTemplate = createContentTemplate(todo);
+        todoItem.append(contentTemplate.todoTextEl);
+        todoItem.append(contentTemplate.btnWrapper);
     }
-    
     return todoItem;
 }
 

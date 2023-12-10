@@ -3,7 +3,7 @@ const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
 
-const obj = {
+const todosEntity = {
     todos: JSON.parse(localStorage.getItem('items')) || [],
     get allTodos() {
         return this.todos;
@@ -23,17 +23,17 @@ let editTodoId = null;
 
 
 function updatelocalStorage() {
-    localStorage.setItem('items', JSON.stringify(obj.todos));
+    localStorage.setItem('items', JSON.stringify(todosEntity.todos));
 }
 
 
 // кнопка выполнить
 function toggleTodoActive(currentTodo) {
-    obj.allTodos.forEach(todo => {
+    todosEntity.allTodos.forEach(todo => {
         if (currentTodo.id !== todo.id)  return;
         todo.active = !currentTodo.active;
     })
-    obj.allTodos = [...obj.todos];
+    todosEntity.allTodos = [...todosEntity.todos];
     updatelocalStorage();
     // renderTodos();
     // console.log(currentTodo);
@@ -41,7 +41,7 @@ function toggleTodoActive(currentTodo) {
 
 // кнопка удалить
 function deleteTodo(currentTodo) {
-    obj.allTodos = obj.allTodos.filter(todo => todo.id !== currentTodo.id);
+    todosEntity.allTodos = todosEntity.allTodos.filter(todo => todo.id !== currentTodo.id);
     updatelocalStorage();
 }
 
@@ -54,14 +54,14 @@ function openTodoEditor(currentTodo) {
 
 
 function changeTodoText(todo, todoEditInput) {
-    obj.allTodos.forEach((todoItem) => {
+    todosEntity.allTodos.forEach((todoItem) => {
         if (todoItem.id === todo.id) {
             todoItem.text = todoEditInput.value;
             updatelocalStorage();
         }
     })
     editTodoId = null;
-    obj.allTodos = [...obj.todos];
+    todosEntity.allTodos = [...todosEntity.todos];
     // renderTodos();
 }
 
@@ -102,7 +102,7 @@ function createEditTemplate(todo) {
  
     buttonCancel.addEventListener('click', () => {
         editTodoId = null;
-        renderTodos();
+        // renderTodos();
     })
     
     todoEditInput.addEventListener('keypress', (event) => {
@@ -202,8 +202,8 @@ function addTodo() {
     mainFieldInput.value = '';
     localStorage.setItem('counter', JSON.stringify(++counter));
  
-    obj.todos.push(todo);
-    obj.allTodos = [...obj.todos];
+    todosEntity.todos.push(todo);
+    todosEntity.allTodos = [...todosEntity.todos];
     updatelocalStorage();
 
     // renderTodos();
@@ -223,12 +223,12 @@ addButton.addEventListener('click', addTodo);
 function renderTodos() {
     todolist.innerHTML = '';
  
-    let filteredTodos = obj.todos;
+    let filteredTodos = todosEntity.todos;
     if (statusFilterValue === 'active') {
-        filteredTodos = obj.todos.filter(todo => todo.active);
+        filteredTodos = todosEntity.todos.filter(todo => todo.active);
     } 
     if (statusFilterValue === 'completed') {
-        filteredTodos = obj.todos.filter(todo => !todo.active);
+        filteredTodos = todosEntity.todos.filter(todo => !todo.active);
     }
  
     filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
@@ -245,7 +245,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
 // кнопка очистить
 clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
-    obj.todos.length = 0;
+    todosEntity.todos.length = 0;
     localStorage.clear();
 })
  

@@ -3,46 +3,44 @@ const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
 
-const todosEntity = {
-    todos: JSON.parse(localStorage.getItem('items')) || [],
-    get allTodos() {
-        return this.todos;
+const state = {
+    _todos: JSON.parse(localStorage.getItem('items')) || [],
+    get todos() {
+        return this._todos;
     },
-    set allTodos(value) {
-        this.todos = value;
+    set todos(value) {
+        this._todos = value;
         renderTodos();
     },
 };
 
 
-// let todos = JSON.parse(localStorage.getItem('items')) || [];
 let counter = localStorage.getItem('counter') || 1;
  
 let statusFilterValue = 'all';
 let editTodoId = null;
 
 
-function updatelocalStorage() {
-    localStorage.setItem('items', JSON.stringify(todosEntity.todos));
+function updatelocalStorage(name, value) {
+    localStorage.setItem(name, JSON.stringify(value));
 }
 
 
 // кнопка выполнить
 function toggleTodoActive(currentTodo) {
-    todosEntity.allTodos.forEach(todo => {
+    state.todos.forEach(todo => {
         if (currentTodo.id !== todo.id)  return;
         todo.active = !currentTodo.active;
     })
-    todosEntity.allTodos = [...todosEntity.todos];
-    updatelocalStorage();
-    // renderTodos();
+    state.todos = [...state.todos];
+    updatelocalStorage('items', state.todos);
     // console.log(currentTodo);
 }
 
 // кнопка удалить
 function deleteTodo(currentTodo) {
-    todosEntity.allTodos = todosEntity.allTodos.filter(todo => todo.id !== currentTodo.id);
-    updatelocalStorage();
+    state.todos = state.todos.filter(todo => todo.id !== currentTodo.id);
+    updatelocalStorage('items', state.todos);
 }
 
 // кнопка редактировать
@@ -54,15 +52,14 @@ function openTodoEditor(currentTodo) {
 
 
 function changeTodoText(todo, todoEditInput) {
-    todosEntity.allTodos.forEach((todoItem) => {
+    state.todos.forEach((todoItem) => {
         if (todoItem.id === todo.id) {
             todoItem.text = todoEditInput.value;
-            updatelocalStorage();
+            updatelocalStorage('items', state.todos);
         }
     })
     editTodoId = null;
-    todosEntity.allTodos = [...todosEntity.todos];
-    // renderTodos();
+    state.todos = [...state.todos];
 }
 
 
@@ -102,7 +99,7 @@ function createEditTemplate(todo) {
  
     buttonCancel.addEventListener('click', () => {
         editTodoId = null;
-        // renderTodos();
+        renderTodos();
     })
     
     todoEditInput.addEventListener('keypress', (event) => {
@@ -182,31 +179,27 @@ function createTodoTemplate(todo) {
 }
 
 
-function CreateTodo(text) {
-    this.text = text;
-    this.active = true;
-    this.id = localStorage.getItem('counter') || counter;
+function createTodo(text) {
+    const todo = {
+        text,
+        active: true,
+        id: localStorage.getItem('counter') || counter,
+    }
+    return todo;
 }
 
 
 function addTodo() {
     if (!mainFieldInput.value) return;
     
-    const todo = new CreateTodo(mainFieldInput.value);
-    // const todo = {
-    //     text: mainFieldInput.value,
-    //     active: true,
-    //     id: localStorage.getItem('counter') || counter,
-    // };
+    const todo = createTodo(mainFieldInput.value);
  
     mainFieldInput.value = '';
-    localStorage.setItem('counter', JSON.stringify(++counter));
+    updatelocalStorage('counter', ++counter);
  
-    todosEntity.todos.push(todo);
-    todosEntity.allTodos = [...todosEntity.todos];
-    updatelocalStorage();
-
-    // renderTodos();
+    state.todos.push(todo);
+    state.todos = [...state.todos];
+    updatelocalStorage('items', state.todos);
 }
  
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -223,12 +216,12 @@ addButton.addEventListener('click', addTodo);
 function renderTodos() {
     todolist.innerHTML = '';
  
-    let filteredTodos = todosEntity.todos;
+    let filteredTodos = state.todos;
     if (statusFilterValue === 'active') {
-        filteredTodos = todosEntity.todos.filter(todo => todo.active);
+        filteredTodos = state.todos.filter(todo => todo.active);
     } 
     if (statusFilterValue === 'completed') {
-        filteredTodos = todosEntity.todos.filter(todo => !todo.active);
+        filteredTodos = state.todos.filter(todo => !todo.active);
     }
  
     filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
@@ -245,7 +238,7 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
 // кнопка очистить
 clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
-    todosEntity.todos.length = 0;
+    state.todos.length = 0;
     localStorage.clear();
 })
  

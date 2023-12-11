@@ -2,8 +2,10 @@ const mainFieldInput = document.querySelector('.input');
 const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
+let counter = localStorage.getItem('counter') || 1;
 
-const state = {
+
+const stateTodos = {
     _todos: JSON.parse(localStorage.getItem('items')) || [],
     get todos() {
         return this._todos;
@@ -14,11 +16,27 @@ const state = {
     },
 };
 
+const stateEditTodoId = {
+    _editTodoId: null,
+    get editTodoId() {
+        return this._editTodoId;
+    },
+    set editTodoId(value) {
+        this._editTodoId = value;
+        renderTodos();
+    },
+};
 
-let counter = localStorage.getItem('counter') || 1;
- 
-let statusFilterValue = 'all';
-let editTodoId = null;
+let stateFilterValue = {
+    statusFilterValue: 'all',
+}
+
+stateFilterValue = new Proxy(stateFilterValue, {
+   set(target, prop, value) {
+        target[prop] = value;
+        renderTodos();
+   }
+})
 
 
 function updatelocalStorage(name, value) {
@@ -28,38 +46,35 @@ function updatelocalStorage(name, value) {
 
 // кнопка выполнить
 function toggleTodoActive(currentTodo) {
-    state.todos.forEach(todo => {
+    stateTodos.todos.forEach(todo => {
         if (currentTodo.id !== todo.id)  return;
         todo.active = !currentTodo.active;
     })
-    state.todos = [...state.todos];
-    updatelocalStorage('items', state.todos);
-    // console.log(currentTodo);
+    stateTodos.todos = [...stateTodos.todos];
+    updatelocalStorage('items', stateTodos.todos);
 }
 
 // кнопка удалить
 function deleteTodo(currentTodo) {
-    state.todos = state.todos.filter(todo => todo.id !== currentTodo.id);
-    updatelocalStorage('items', state.todos);
+    stateTodos.todos = stateTodos.todos.filter(todo => todo.id !== currentTodo.id);
+    updatelocalStorage('items', stateTodos.todos);
 }
 
 // кнопка редактировать
 function openTodoEditor(currentTodo) {
-    editTodoId = currentTodo.id;
-    renderTodos();
+    stateEditTodoId.editTodoId = currentTodo.id;
 }
 
 
 
 function changeTodoText(todo, todoEditInput) {
-    state.todos.forEach((todoItem) => {
+    stateTodos.todos.forEach((todoItem) => {
         if (todoItem.id === todo.id) {
             todoItem.text = todoEditInput.value;
-            updatelocalStorage('items', state.todos);
+            updatelocalStorage('items', stateTodos.todos);
         }
     })
-    editTodoId = null;
-    state.todos = [...state.todos];
+    stateEditTodoId.editTodoId = null;
 }
 
 
@@ -98,8 +113,7 @@ function createEditTemplate(todo) {
     buttonOk.addEventListener('click', () => changeTodoText(todo, todoEditInput));
  
     buttonCancel.addEventListener('click', () => {
-        editTodoId = null;
-        renderTodos();
+        stateEditTodoId.editTodoId = null;
     })
     
     todoEditInput.addEventListener('keypress', (event) => {
@@ -161,7 +175,7 @@ function createContentTemplate(todo) {
 
 // создаем новый todo
 function createTodoTemplate(todo) {
-    const isEdit = todo.id === editTodoId;
+    const isEdit = todo.id === stateEditTodoId.editTodoId;
 
     const todoTemplate = document.createElement('li');
     todoTemplate.classList.add('todo-list__item');
@@ -197,9 +211,9 @@ function addTodo() {
     mainFieldInput.value = '';
     updatelocalStorage('counter', ++counter);
  
-    state.todos.push(todo);
-    state.todos = [...state.todos];
-    updatelocalStorage('items', state.todos);
+    stateTodos.todos.push(todo);
+    stateTodos.todos = [...stateTodos.todos];
+    updatelocalStorage('items', stateTodos.todos);
 }
  
 mainFieldInput.addEventListener('keypress', (event) => {
@@ -216,12 +230,12 @@ addButton.addEventListener('click', addTodo);
 function renderTodos() {
     todolist.innerHTML = '';
  
-    let filteredTodos = state.todos;
-    if (statusFilterValue === 'active') {
-        filteredTodos = state.todos.filter(todo => todo.active);
+    let filteredTodos = stateTodos.todos;
+    if (stateFilterValue.statusFilterValue === 'active') {
+        filteredTodos = stateTodos.todos.filter(todo => todo.active);
     } 
-    if (statusFilterValue === 'completed') {
-        filteredTodos = state.todos.filter(todo => !todo.active);
+    if (stateFilterValue.statusFilterValue === 'completed') {
+        filteredTodos = stateTodos.todos.filter(todo => !todo.active);
     }
  
     filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
@@ -229,16 +243,14 @@ function renderTodos() {
  
 const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
-    statusFilterValue = event.target.value;
-    renderTodos();
+    stateFilterValue.statusFilterValue = event.target.value;
 }))
-
 
  
 // кнопка очистить
 clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
-    state.todos.length = 0;
+    stateTodos.todos.length = 0;
     localStorage.clear();
 })
  

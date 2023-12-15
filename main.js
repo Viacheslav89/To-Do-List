@@ -5,38 +5,49 @@ const todolist = document.querySelector('.todo-list');
 let counter = localStorage.getItem('counter') || 1;
 
 
-const stateTodos = {
-    _todos: JSON.parse(localStorage.getItem('items')) || [],
-    get todos() {
-        return this._todos;
-    },
-    set todos(value) {
-        this._todos = value;
-        renderTodos();
-    },
-};
-
-const stateEditTodoId = {
-    _editTodoId: null,
-    get editTodoId() {
-        return this._editTodoId;
-    },
-    set editTodoId(value) {
-        this._editTodoId = value;
-        renderTodos();
-    },
-};
-
-let stateFilterValue = {
-    statusFilterValue: 'all',
+function createGetSetState(initialValue) {
+    return {
+        _todos: initialValue,
+        get todos() {
+            return this._todos;
+        },
+        set todos(value) {
+            this._todos = value;
+            renderTodos();
+        },
+    }
 }
 
-stateFilterValue = new Proxy(stateFilterValue, {
-   set(target, prop, value) {
-        target[prop] = value;
-        renderTodos();
-   }
-})
+const stateTodos = createGetSetState(JSON.parse(localStorage.getItem('items')) || []);
+
+
+function createProxyState(initialValue) {
+    return statusFilterValue = new Proxy(initialValue, {
+        get(target, prop) {
+            return target[prop];
+        },
+        set(target, prop, value) {
+            target[prop] = value;
+            renderTodos();
+        }
+    });
+}
+
+const stateFilterValue = createProxyState({ statusFilter: 'all' });
+
+
+function createFunctionState(initialValue) {
+    let value = initialValue;
+    return [function getEditTodoId() {
+        return value;
+    }, function setEditTodoId(val) {
+            value = val;
+            renderTodos();
+    }];
+}
+
+let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
+
 
 
 function updatelocalStorage(name, value) {
@@ -62,7 +73,7 @@ function deleteTodo(currentTodo) {
 
 // кнопка редактировать
 function openTodoEditor(currentTodo) {
-    stateEditTodoId.editTodoId = currentTodo.id;
+    setEditTodoId(currentTodo.id);
 }
 
 
@@ -74,7 +85,7 @@ function changeTodoText(todo, todoEditInput) {
             updatelocalStorage('items', stateTodos.todos);
         }
     })
-    stateEditTodoId.editTodoId = null;
+    setEditTodoId(null);
 }
 
 
@@ -113,7 +124,7 @@ function createEditTemplate(todo) {
     buttonOk.addEventListener('click', () => changeTodoText(todo, todoEditInput));
  
     buttonCancel.addEventListener('click', () => {
-        stateEditTodoId.editTodoId = null;
+        setEditTodoId(null);
     })
     
     todoEditInput.addEventListener('keypress', (event) => {
@@ -121,7 +132,6 @@ function createEditTemplate(todo) {
             buttonOk.click();
         }
     })
-
     return editTemplate;
 }
  
@@ -175,7 +185,7 @@ function createContentTemplate(todo) {
 
 // создаем новый todo
 function createTodoTemplate(todo) {
-    const isEdit = todo.id === stateEditTodoId.editTodoId;
+    const isEdit = todo.id === getEditTodoId();
 
     const todoTemplate = document.createElement('li');
     todoTemplate.classList.add('todo-list__item');
@@ -231,10 +241,10 @@ function renderTodos() {
     todolist.innerHTML = '';
  
     let filteredTodos = stateTodos.todos;
-    if (stateFilterValue.statusFilterValue === 'active') {
+    if (stateFilterValue.statusFilter === 'active') {
         filteredTodos = stateTodos.todos.filter(todo => todo.active);
     } 
-    if (stateFilterValue.statusFilterValue === 'completed') {
+    if (stateFilterValue.statusFilter === 'completed') {
         filteredTodos = stateTodos.todos.filter(todo => !todo.active);
     }
  
@@ -243,7 +253,7 @@ function renderTodos() {
  
 const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
-    stateFilterValue.statusFilterValue = event.target.value;
+    statusFilterValue.statusFilter = event.target.value;
 }))
 
  

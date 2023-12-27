@@ -1,3 +1,6 @@
+import './style.css';
+import { createGetSetState, createProxyState, createFunctionState } from './utility';
+
 const mainFieldInput = document.querySelector('.input');
 const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
@@ -5,46 +8,47 @@ const todolist = document.querySelector('.todo-list');
 let counter = localStorage.getItem('counter') || 1;
 
 
-function createGetSetState(initialValue) {
-    return {
-        _todos: initialValue,
-        get todos() {
-            return this._todos;
-        },
-        set todos(value) {
-            this._todos = value;
-            renderTodos();
-        },
-    }
-}
+// function createGetSetState(initialValue) {
+//     return {
+//         _todos: initialValue,
+//         get todos() {
+//             return this._todos;
+//         },
+//         set todos(value) {
+//             this._todos = value;
+//             renderTodos();
+//         },
+//     }
+// }
 
 const stateTodos = createGetSetState(JSON.parse(localStorage.getItem('items')) || []);
 
 
-function createProxyState(initialValue) {
-    return statusFilterValue = new Proxy(initialValue, {
-        get(target, prop) {
-            return target[prop];
-        },
-        set(target, prop, value) {
-            target[prop] = value;
-            renderTodos();
-        }
-    });
-}
+// function createProxyState(initialValue) {
+//     let statusFilterValue;
+//     return statusFilterValue = new Proxy(initialValue, {
+//         get(target, prop) {
+//             return target[prop];
+//         },
+//         set(target, prop, value) {
+//             target[prop] = value;
+//             renderTodos();
+//         }
+//     });
+// }
 
 const stateFilterValue = createProxyState({ statusFilter: 'all' });
 
 
-function createFunctionState(initialValue) {
-    let value = initialValue;
-    return [function getEditTodoId() {
-        return value;
-    }, function setEditTodoId(val) {
-            value = val;
-            renderTodos();
-    }];
-}
+// function createFunctionState(initialValue) {
+//     let value = initialValue;
+//     return [function getEditTodoId() {
+//         return value;
+//     }, function setEditTodoId(val) {
+//             value = val;
+//             renderTodos();
+//     }];
+// }
 
 let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
 
@@ -237,7 +241,7 @@ addButton.addEventListener('click', addTodo);
 
  
 
-function renderTodos() {
+export function renderTodos() {
     todolist.innerHTML = '';
  
     let filteredTodos = stateTodos.todos;
@@ -253,7 +257,7 @@ function renderTodos() {
  
 const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
-    statusFilterValue.statusFilter = event.target.value;
+    stateFilterValue.statusFilter = event.target.value;
 }))
 
  

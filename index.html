@@ -1,38 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do List</title>
-</head>
-<body>
-  <div class="main-wrapper">
-    <h1 class="title">To Do List</h1>
-    <input class="input" type="text">
+  </head>
 
-
-    <div class="button-wrapper">
-        <button class="add-button btn">Добавить</button>
-        <button class="clear-button btn">Очистить</button>
-    </div>
-
-    <div class="radio-wrapper">
-        <input class="all-radio" name="radio" type="radio" id="all-radio" value="all" checked>
-        <label for="all-radio">Весь список</label>
-        <br>
-        <input class="active-radio" name="radio" type="radio" id="active-radio" value="active">
-        <label for="active-radio">Активные</label>
-        <br>
-        <input class="completed-radio" name="radio" type="radio" id="completed-radio" value="completed">
-        <label for="completed-radio">Выполненые</label>
-    </div>
-
-    <div class="ul-wrapper">
-      <ul class="todo-list"></ul>
-    </div>
-
-    <script src="./main.js"></script>
-  </div>
-</body>
+  <body>
+    <div class="main-wrapper">
+      <h1 class="title">To Do List</h1>
+      <input class="input" type="text">
+  
+      <div class="button-wrapper">
+          <button class="add-button btn">Добавить</button>
+          <button class="clear-button btn">Очистить</button>
+      </div>
+  
+      <div class="radio-wrapper">
+          <input class="all-radio" name="radio" type="radio" id="all-radio" value="all" checked>
+          <label for="all-radio">Весь список</label>
+          <br>
+          <input class="active-radio" name="radio" type="radio" id="active-radio" value="active">
+          <label for="active-radio">Активные</label>
+          <br>
+          <input class="completed-radio" name="radio" type="radio" id="completed-radio" value="completed">
+          <label for="completed-radio">Выполненые</label>
+      </div>
+  
+      <div class="ul-wrapper">
+        <ul class="todo-list"></ul>
+      </div>
+  </body>
+  <script type="module" src="/main.js"></script>
 </html>

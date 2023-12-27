@@ -23,6 +23,7 @@ export function createProxyState(initialValue) {
         set(target, prop, value) {
             target[prop] = value;
             renderTodos();
+            return true;
         }
     });
 }

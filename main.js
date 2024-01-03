@@ -1,96 +1,19 @@
-import './style.css';
-import { createGetSetState, createProxyState, createFunctionState } from './utility';
+import './style.scss';
+import { createGetSetState, createProxyState, createFunctionState } from './utility.js';
 
-const mainFieldInput = document.querySelector('.input');
+import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText } from './halper.js';
+
+export const mainFieldInput = document.querySelector('.input');
 const addButton = document.querySelector('.add-button');
 const clearButton = document.querySelector('.clear-button');
 const todolist = document.querySelector('.todo-list');
-let counter = localStorage.getItem('counter') || 1;
+// let counter = localStorage.getItem('counter') || 1;
 
 
-// function createGetSetState(initialValue) {
-//     return {
-//         _todos: initialValue,
-//         get todos() {
-//             return this._todos;
-//         },
-//         set todos(value) {
-//             this._todos = value;
-//             renderTodos();
-//         },
-//     }
-// }
+export const stateTodos = createGetSetState(JSON.parse(localStorage.getItem('items')) || []);
+export const stateFilterValue = createProxyState({ statusFilter: 'all' });
+export let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
 
-const stateTodos = createGetSetState(JSON.parse(localStorage.getItem('items')) || []);
-
-
-// function createProxyState(initialValue) {
-//     let statusFilterValue;
-//     return statusFilterValue = new Proxy(initialValue, {
-//         get(target, prop) {
-//             return target[prop];
-//         },
-//         set(target, prop, value) {
-//             target[prop] = value;
-//             renderTodos();
-//         }
-//     });
-// }
-
-const stateFilterValue = createProxyState({ statusFilter: 'all' });
-
-
-// function createFunctionState(initialValue) {
-//     let value = initialValue;
-//     return [function getEditTodoId() {
-//         return value;
-//     }, function setEditTodoId(val) {
-//             value = val;
-//             renderTodos();
-//     }];
-// }
-
-let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
-
-
-
-function updatelocalStorage(name, value) {
-    localStorage.setItem(name, JSON.stringify(value));
-}
-
-
-// кнопка выполнить
-function toggleTodoActive(currentTodo) {
-    stateTodos.todos.forEach(todo => {
-        if (currentTodo.id !== todo.id)  return;
-        todo.active = !currentTodo.active;
-    })
-    stateTodos.todos = [...stateTodos.todos];
-    updatelocalStorage('items', stateTodos.todos);
-}
-
-// кнопка удалить
-function deleteTodo(currentTodo) {
-    stateTodos.todos = stateTodos.todos.filter(todo => todo.id !== currentTodo.id);
-    updatelocalStorage('items', stateTodos.todos);
-}
-
-// кнопка редактировать
-function openTodoEditor(currentTodo) {
-    setEditTodoId(currentTodo.id);
-}
-
-
-
-function changeTodoText(todo, todoEditInput) {
-    stateTodos.todos.forEach((todoItem) => {
-        if (todoItem.id === todo.id) {
-            todoItem.text = todoEditInput.value;
-            updatelocalStorage('items', stateTodos.todos);
-        }
-    })
-    setEditTodoId(null);
-}
 
 
 function createEditTemplate(todo) {
@@ -140,6 +63,7 @@ function createEditTemplate(todo) {
 }
  
 
+
 function createBtnTodo(todo) {
     const btnWrapper = document.createElement('div');
     btnWrapper.classList.add('btn-wrapper');
@@ -187,7 +111,6 @@ function createContentTemplate(todo) {
 
 
 
-// создаем новый todo
 function createTodoTemplate(todo) {
     const isEdit = todo.id === getEditTodoId();
 
@@ -206,37 +129,14 @@ function createTodoTemplate(todo) {
     return todoTemplate;
 }
 
-
-function createTodo(text) {
-    const todo = {
-        text,
-        active: true,
-        id: localStorage.getItem('counter') || counter,
-    }
-    return todo;
-}
-
-
-function addTodo() {
-    if (!mainFieldInput.value) return;
-    
-    const todo = createTodo(mainFieldInput.value);
  
-    mainFieldInput.value = '';
-    updatelocalStorage('counter', ++counter);
- 
-    stateTodos.todos.push(todo);
-    stateTodos.todos = [...stateTodos.todos];
-    updatelocalStorage('items', stateTodos.todos);
-}
- 
+
 mainFieldInput.addEventListener('keypress', (event) => {
     if (event.key === "Enter") {
         addButton.click();
     }
 })
  
-
 addButton.addEventListener('click', addTodo);
 
  
@@ -260,8 +160,8 @@ sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
     stateFilterValue.statusFilter = event.target.value;
 }))
 
+
  
-// кнопка очистить
 clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
     stateTodos.todos.length = 0;

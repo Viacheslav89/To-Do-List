@@ -1,4 +1,4 @@
-import { renderTodos } from './main';
+import { renderTodos } from './main.js';
 
 export function createGetSetState(initialValue) {
     return {
@@ -39,4 +39,8 @@ export function createFunctionState(initialValue) {
     }];
 }
 
-// export { createGetSetState, createProxyState, createFunctionState };
+
+export function updatelocalStorage(name, value) {
+    localStorage.setItem(name, JSON.stringify(value));
+}
+

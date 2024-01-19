@@ -1,7 +1,7 @@
 import './style.scss';
 import { createGetSetState, createProxyState, createFunctionState } from './utility.js';
 
-import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText } from './halper.js';
+import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText } from './helpers.js';
 
 export const mainFieldInput = document.querySelector('.input');
 const addButton = document.querySelector('.add-button');

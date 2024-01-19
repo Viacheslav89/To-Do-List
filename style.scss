@@ -80,11 +80,18 @@ body {
   margin-left: auto;
   margin-right: auto;
   word-break: break-all;
-}
 
-.todo-list__item {
-  display: flex;
-  justify-content: space-between;
+  .todo-list__item {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .todo-list__text {
+    margin: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid black;
+    width: 100%;
+  }
 }
 
 .content__wrapper {
@@ -103,12 +110,6 @@ body {
   border-bottom: 1px solid black;
 }
 
-.todo-list__text {
-  margin: 0;
-  margin-bottom: 15px;
-  border-bottom: 1px solid black;
-  width: 100%;
-}
 
 .btn-wrapper {
   display: flex;

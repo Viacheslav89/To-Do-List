@@ -49,11 +49,11 @@ body {
   background-color: rgb(114, 173, 41);
   cursor: pointer;
   margin-bottom: 30px;
-}
 
-.btn:hover {
-  opacity: 10px;
-  background-color: #618f24;
+  &:hover {
+    opacity: 10px;
+    background-color: #618f24;
+}
 }
 
 .radio-wrapper {
@@ -81,12 +81,12 @@ body {
   margin-right: auto;
   word-break: break-all;
 
-  .todo-list__item {
+  &__item {
     display: flex;
     justify-content: space-between;
   }
 
-  .todo-list__text {
+  &__text {
     margin: 0;
     margin-bottom: 15px;
     border-bottom: 1px solid black;

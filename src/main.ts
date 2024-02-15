@@ -1,22 +1,24 @@
-import './style.scss';
-import { createGetSetState, createProxyState, createFunctionState } from './utility.js';
-
-import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText } from './helpers.js';
-
-export const mainFieldInput = document.querySelector('.input');
-const addButton = document.querySelector('.add-button');
-const clearButton = document.querySelector('.clear-button');
-const todolist = document.querySelector('.todo-list');
-// let counter = localStorage.getItem('counter') || 1;
+import './style.scss'
+import { createGetSetState, createProxyState, createFunctionState } from './utility.ts';
+import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText, Todo } from './helpers.ts';
 
 
-export const stateTodos = createGetSetState(JSON.parse(localStorage.getItem('items')) || []);
+export const mainFieldInput = document.querySelector('.input') as HTMLInputElement;
+const addButton = document.querySelector('.add-button') as HTMLInputElement;
+const clearButton = document.querySelector('.clear-button') as HTMLInputElement;
+const todolist = document.querySelector('.todo-list') as HTMLInputElement;
+
+
+
+const itemsString: string = localStorage.getItem('items') || '[]';
+
+export const stateTodos = createGetSetState(JSON.parse(itemsString));
 export const stateFilterValue = createProxyState({ statusFilter: 'all' });
-export let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
+export let [ getEditTodoId, setEditTodoId ]: any = createFunctionState(0);
 
 
 
-function createEditTemplate(todo) {
+function createEditTemplate(todo: Todo) {
     const editTemplate = document.createElement('div');
     editTemplate.classList.add('content__wrapper');
  
@@ -61,10 +63,9 @@ function createEditTemplate(todo) {
     })
     return editTemplate;
 }
- 
 
 
-function createBtnTodo(todo) {
+function createBtnTodo(todo: Todo) {
     const btnWrapper = document.createElement('div');
     btnWrapper.classList.add('btn-wrapper');
 
@@ -91,8 +92,7 @@ function createBtnTodo(todo) {
 }
 
 
-
-function createContentTemplate(todo) {
+function createContentTemplate(todo: Todo) {
     const todoTextEl = document.createElement('p');
     todoTextEl.classList.add('todo-list__text');
     todoTextEl.append(todo.text);
@@ -110,8 +110,7 @@ function createContentTemplate(todo) {
 }
 
 
-
-function createTodoTemplate(todo) {
+function createTodoTemplate(todo: Todo): HTMLLIElement {
     const isEdit = todo.id === getEditTodoId();
 
     const todoTemplate = document.createElement('li');
@@ -129,9 +128,8 @@ function createTodoTemplate(todo) {
     return todoTemplate;
 }
 
- 
 
-mainFieldInput.addEventListener('keypress', (event) => {
+mainFieldInput.addEventListener('keypress', (event: KeyboardEvent) => {
     if (event.key === "Enter") {
         addButton.click();
     }
@@ -139,9 +137,8 @@ mainFieldInput.addEventListener('keypress', (event) => {
  
 addButton.addEventListener('click', addTodo);
 
- 
 
-export function renderTodos() {
+export function renderTodos(): void {
     todolist.innerHTML = '';
  
     let filteredTodos = stateTodos.todos;
@@ -157,11 +154,11 @@ export function renderTodos() {
  
 const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
-    stateFilterValue.statusFilter = event.target.value;
+    const target = event.target as HTMLInputElement;
+    stateFilterValue.statusFilter = target.value;
 }))
 
 
- 
 clearButton.addEventListener('click', () => {
     todolist.innerHTML = '';
     stateTodos.todos.length = 0;

@@ -1,6 +1,8 @@
-import { renderTodos } from './main.js';
+import { renderTodos } from './main.ts';
+import { Todo } from './helpers.ts';
 
-export function createGetSetState(initialValue) {
+
+export function createGetSetState(initialValue: Todo[] | [] ): {_todos: Todo[], get todos(): Todo[], set todos(value: any)} {
     return {
         _todos: initialValue,
         get todos() {
@@ -14,7 +16,8 @@ export function createGetSetState(initialValue) {
 }
 
 
-export function createProxyState(initialValue) {
+
+export function createProxyState(initialValue: any) {
     let statusFilterValue;
     return statusFilterValue = new Proxy(initialValue, {
         get(target, prop) {
@@ -29,18 +32,17 @@ export function createProxyState(initialValue) {
 }
 
 
-export function createFunctionState(initialValue) {
+export function createFunctionState(initialValue: number) {
     let value = initialValue;
     return [function getEditTodoId() {
         return value;
-    }, function setEditTodoId(val) {
+    }, function setEditTodoId(val: any) {
             value = val;
             renderTodos();
     }];
 }
 
 
-export function updatelocalStorage(name, value) {
+export function updatelocalStorage(name: string, value: Todo[] | number): void {
     localStorage.setItem(name, JSON.stringify(value));
 }
-

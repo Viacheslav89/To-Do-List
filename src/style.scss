@@ -50,7 +50,6 @@ body {
   cursor: pointer;
   margin-bottom: 30px;
   color: black;
-  text-align: center;
 
   &:hover {
     opacity: 10px;
@@ -132,6 +131,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   color: black;
+  text-align: center;
 }
 
 .btn-ok {

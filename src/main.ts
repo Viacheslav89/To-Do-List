@@ -1,24 +1,29 @@
 import './style.scss'
 import { createGetSetState, createProxyState, createFunctionState } from './utility.ts';
-import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText, Todo } from './helpers.ts';
+import { toggleTodoActive, deleteTodo, openTodoEditor, addTodo, changeTodoText } from './helpers.ts';
 
 
 export const mainFieldInput = document.querySelector('.input') as HTMLInputElement;
-const addButton = document.querySelector('.add-button') as HTMLInputElement;
-const clearButton = document.querySelector('.clear-button') as HTMLInputElement;
-const todolist = document.querySelector('.todo-list') as HTMLInputElement;
+const addButton = document.querySelector('.add-button') as HTMLButtonElement;
+const clearButton = document.querySelector('.clear-button') as HTMLButtonElement;
+const todolist = document.querySelector('.todo-list') as HTMLUListElement;
 
+export interface Todo {
+    text: string;
+    active: boolean;
+    id: number;
+}
 
 
 const itemsString: string = localStorage.getItem('items') || '[]';
 
 export const stateTodos = createGetSetState(JSON.parse(itemsString));
 export const stateFilterValue = createProxyState({ statusFilter: 'all' });
-export let [ getEditTodoId, setEditTodoId ]: any = createFunctionState(0);
+export let [ getEditTodoId, setEditTodoId ] = createFunctionState(0);
 
 
 
-function createEditTemplate(todo: Todo) {
+function createEditTemplate(todo: Todo): HTMLDivElement {
     const editTemplate = document.createElement('div');
     editTemplate.classList.add('content__wrapper');
  
@@ -56,7 +61,7 @@ function createEditTemplate(todo: Todo) {
         setEditTodoId(null);
     })
     
-    todoEditInput.addEventListener('keypress', (event) => {
+    todoEditInput.addEventListener('keypress', (event: KeyboardEvent) => {
         if (event.key === "Enter") {
             buttonOk.click();
         }
@@ -65,7 +70,7 @@ function createEditTemplate(todo: Todo) {
 }
 
 
-function createBtnTodo(todo: Todo) {
+function createBtnTodo(todo: Todo): HTMLDivElement {
     const btnWrapper = document.createElement('div');
     btnWrapper.classList.add('btn-wrapper');
 
@@ -92,7 +97,7 @@ function createBtnTodo(todo: Todo) {
 }
 
 
-function createContentTemplate(todo: Todo) {
+function createContentTemplate(todo: Todo): {todoTextEl: HTMLParagraphElement, btnWrapper: HTMLDivElement} {
     const todoTextEl = document.createElement('p');
     todoTextEl.classList.add('todo-list__text');
     todoTextEl.append(todo.text);
@@ -138,6 +143,7 @@ mainFieldInput.addEventListener('keypress', (event: KeyboardEvent) => {
 addButton.addEventListener('click', addTodo);
 
 
+
 export function renderTodos(): void {
     todolist.innerHTML = '';
  
@@ -153,9 +159,10 @@ export function renderTodos(): void {
 }
  
 const sortRadios = document.getElementsByName('radio');
-sortRadios.forEach(radio => radio.addEventListener('click', (event) => {
+sortRadios.forEach(radio => radio.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLInputElement;
     stateFilterValue.statusFilter = target.value;
+    // statusFilter.FilterSlug = ACTIVE[target.value];
 }))
 
 

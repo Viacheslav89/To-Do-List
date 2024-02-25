@@ -1,14 +1,13 @@
-import { renderTodos } from './main.ts';
-import { Todo } from './helpers.ts';
+import { renderTodos, Todo } from './main.ts';
 
 
-export function createGetSetState(initialValue: Todo[] | [] ): {_todos: Todo[], get todos(): Todo[], set todos(value: any)} {
+export function createGetSetState(initialValue: Todo[]): {_todos: Todo[], get todos(): Todo[], set todos(value: Todo[])} {
     return {
         _todos: initialValue,
         get todos() {
             return this._todos;
         },
-        set todos(value) {
+        set todos(value: Todo[]) {
             this._todos = value;
             renderTodos();
         },
@@ -16,33 +15,37 @@ export function createGetSetState(initialValue: Todo[] | [] ): {_todos: Todo[], 
 }
 
 
-
-export function createProxyState(initialValue: any) {
-    let statusFilterValue;
-    return statusFilterValue = new Proxy(initialValue, {
-        get(target, prop) {
-            return target[prop];
-        },
-        set(target, prop, value) {
-            target[prop] = value;
-            renderTodos();
-            return true;
-        }
+export const createProxyState = (initialValue: { statusFilter: string }) => {
+    const proxy = new Proxy(initialValue, {
+      get(target, prop: keyof typeof initialValue) {
+        return target[prop];
+      },
+      set(target, prop: keyof typeof initialValue, value) {
+        target[prop] = value;
+  
+        return true;
+      },
     });
-}
+  
+    return proxy;
+  };
 
 
-export function createFunctionState(initialValue: number) {
+export function createFunctionState(initialValue: number | null): [ () => number | null, (val: number | null) => void ] {
     let value = initialValue;
-    return [function getEditTodoId() {
+    return [ function () {
         return value;
-    }, function setEditTodoId(val: any) {
+    }, function (val: number | null) {
             value = val;
             renderTodos();
-    }];
+    } ];
 }
 
 
 export function updatelocalStorage(name: string, value: Todo[] | number): void {
     localStorage.setItem(name, JSON.stringify(value));
 }
+
+
+
+

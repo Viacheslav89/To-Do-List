@@ -15,20 +15,20 @@ export function createGetSetState(initialValue: Todo[]): {_todos: Todo[], get to
 }
 
 
-export const createProxyState = (initialValue: { statusFilter: string }) => {
-    const proxy = new Proxy(initialValue, {
+export function createProxyState(initialValue: { statusFilter: string }) {
+  const proxy = new Proxy(initialValue, {
       get(target, prop: keyof typeof initialValue) {
-        return target[prop];
+          return target[prop];
       },
       set(target, prop: keyof typeof initialValue, value) {
-        target[prop] = value;
+          target[prop] = value;
+          renderTodos();
+          return true;
+      }
+  });
   
-        return true;
-      },
-    });
-  
-    return proxy;
-  };
+  return proxy;
+}
 
 
 export function createFunctionState(initialValue: number | null): [ () => number | null, (val: number | null) => void ] {

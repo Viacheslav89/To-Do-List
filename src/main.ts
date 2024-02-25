@@ -150,9 +150,11 @@ export function renderTodos(): void {
     let filteredTodos = stateTodos.todos;
     if (stateFilterValue.statusFilter === 'active') {
         filteredTodos = stateTodos.todos.filter(todo => todo.active);
+        // console.log(stateFilterValue.statusFilter)
     } 
     if (stateFilterValue.statusFilter === 'completed') {
         filteredTodos = stateTodos.todos.filter(todo => !todo.active);
+        // console.log(stateFilterValue.statusFilter)
     }
  
     filteredTodos.forEach(todo => todolist.append(createTodoTemplate(todo)));
@@ -162,7 +164,6 @@ const sortRadios = document.getElementsByName('radio');
 sortRadios.forEach(radio => radio.addEventListener('click', (event: MouseEvent) => {
     const target = event.target as HTMLInputElement;
     stateFilterValue.statusFilter = target.value;
-    // statusFilter.FilterSlug = ACTIVE[target.value];
 }))
 
 

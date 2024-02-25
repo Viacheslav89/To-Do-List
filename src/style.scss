@@ -254,7 +254,7 @@ body {
   }
 
   .todo-list {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: bold;
       margin-left: 30px;
       width: 270px;
@@ -266,6 +266,16 @@ body {
   .todo-list-item__input {
       font-size: 14px;
   }
+
+  .button {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+.btn-ok {
+  font-size: 5px;
+}
 }
 
 
@@ -284,7 +294,7 @@ body {
   }
 
   .todo-list {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: bold;
       margin-left: 30px;
       width: 270px;
@@ -295,15 +305,5 @@ body {
 
   .todo-list-item__input {
       font-size: 13px;
-  }
-
-  .button {
-      width: 20px;
-      height: 20px;
-      font-size: 10px;
-  }
-
-  .btn-ok {
-      font-size: 5px;
   }
 }

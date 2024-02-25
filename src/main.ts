@@ -8,6 +8,7 @@ const addButton = document.querySelector('.add-button') as HTMLButtonElement;
 const clearButton = document.querySelector('.clear-button') as HTMLButtonElement;
 const todolist = document.querySelector('.todo-list') as HTMLUListElement;
 
+
 export interface Todo {
     text: string;
     active: boolean;
@@ -172,3 +173,4 @@ clearButton.addEventListener('click', () => {
 })
  
 renderTodos();
+

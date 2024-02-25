@@ -51,13 +51,12 @@ export function openTodoEditor(currentTodo: Todo): void {
 
 
 export function createTodo(text: string): Todo {
-
     const todo: Todo = {
         text,
         active: true,
         id: counter,
         
     }
+
     return todo;
 }
-
